@@ -4,11 +4,11 @@
 /node_modules
 /.pnp
 .pnp.js
-/pages
 # testing
 /coverage
 
 # next.js
+.next
 /.next/
 /out/
 
@@ -16,6 +16,7 @@
 /build
 
 # misc
+.env
 .DS_Store
 .env*
 
