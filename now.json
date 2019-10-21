@@ -1,0 +1,25 @@
+{
+  "name": "newredditscroller3",
+  "github": {
+    "enabled": false
+  },
+  "version": 2,
+  "env": {
+    "FB_API_KEY": "@fb_api_key",
+    "FB_AUTH_DOMAIN": "@fb_auth_domain",
+    "FB_DATABASE_URL": "@fb_database_url",
+    "FB_PROJECT_ID": "@fb_project_id",
+    "FB_STORAGE_BUCKET": "@fb_storage_bucket",
+    "FB_MESSAGING_SENDER_ID": "@fb_messaging_sender_id"
+  },
+  "build": {
+    "env": {
+      "FB_API_KEY": "@fb_api_key",
+      "FB_AUTH_DOMAIN": "@fb_auth_domain",
+      "FB_DATABASE_URL": "@fb_database_url",
+      "FB_PROJECT_ID": "@fb_project_id",
+      "FB_STORAGE_BUCKET": "@fb_storage_bucket",
+      "FB_MESSAGING_SENDER_ID": "@fb_messaging_sender_id"
+    }
+  }
+}

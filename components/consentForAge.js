@@ -1,11 +1,14 @@
 import React from "react";
-const ConsentForAge = ({ pushToHistory, visible, visibilityChange }) => {
+import Link from "next/link";
+const ConsentForAge = ({ visible, visibilityChange }) => {
   return (
     visible && (
       <div className="webkitTransform" style={styling.wrapper}>
         <div style={styling.innerWrapper}>
           <div style={{ marginTop: "12vh" }}>
-            <span style={styling.span}>This site may include adult content.</span>
+            <span style={styling.span}>
+              This site may include adult content.
+            </span>
             <br />
             <span style={styling.span}>You must be 18+ to enter.</span>
             <br />
@@ -13,12 +16,15 @@ const ConsentForAge = ({ pushToHistory, visible, visibilityChange }) => {
             <span>Do you want to continue?</span>
             <br />
             <br />
-            <button onClick={() => visibilityChange(true)} style={styling.button}>
+            <button
+              onClick={() => visibilityChange(true)}
+              style={styling.button}
+            >
               No
             </button>
-            <button onClick={() => pushToHistory("/subreddits/nsfw")} style={styling.button}>
-              Yes
-            </button>
+            <Link href="/subreddits/nsfw">
+              <button style={styling.button}>Yes</button>
+            </Link>
           </div>
         </div>
       </div>

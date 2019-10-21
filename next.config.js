@@ -43,18 +43,33 @@ const withAssetRelocator = (nextConfig = {}) => {
 
 const config = {
   env: {
-    REACT_APP_API_KEY: process.env.REACT_APP_API_KEY,
-    REACT_APP_AUTH_DOMAIN: process.env.REACT_APP_AUTH_DOMAIN,
-    REACT_APP_DATABASE_URL: process.env.REACT_APP_DATABASE_URL,
-    REACT_APP_PROJECT_ID: process.env.REACT_APP_PROJECT_ID,
-    REACT_APP_STORAGE_BUCKET: process.env.REACT_APP_STORAGE_BUCKET,
-    REACT_APP_MESSAGING_SENDER_ID: process.env.REACT_APP_MESSAGING_SENDER_ID,
-    REACT_APP_APP_ID: process.env.REACT_APP_APP_ID
+    FB_API_KEY: process.env.FB_API_KEY,
+    FB_AUTH_DOMAIN: process.env.FB_AUTH_DOMAIN,
+    FB_DATABASE_URL: process.env.FB_DATABASE_URL,
+    FB_PROJECT_ID: process.env.FB_PROJECT_ID,
+    FB_STORAGE_BUCKET: process.env.FB_STORAGE_BUCKET,
+    FB_MESSAGING_SENDER_ID: process.env.FB_MESSAGING_SENDER_ID,
+    FB_APP_ID: process.env.FB_APP_ID
   }
 };
 
 module.exports = withCSS({
-  ...withAssetRelocator(config)
+  ...withAssetRelocator({
+    webpack(config) {
+      config.plugins.push(new webpack.EnvironmentPlugin(localEnv));
+
+      return config;
+    },
+    env: {
+      FB_API_KEY: process.env.FB_API_KEY || "",
+      FB_AUTH_DOMAIN: process.env.FB_AUTH_DOMAIN || "",
+      FB_DATABASE_URL: process.env.FB_DATABASE_URL || "",
+      FB_PROJECT_ID: process.env.FB_PROJECT_ID || "",
+      FB_STORAGE_BUCKET: process.env.FB_STORAGE_BUCKET || "",
+      FB_MESSAGING_SENDER_ID: process.env.FB_MESSAGING_SENDER_ID || "",
+      FB_APP_ID: process.env.FB_APP_ID || ""
+    }
+  })
   // ,
   // lessLoaderOptions: {
   //   javascriptEnabled: true,
@@ -65,18 +80,5 @@ module.exports = withCSS({
 });
 
 // module.exports = withCSS({
-//   webpack(config) {
-//     config.plugins.push(new webpack.EnvironmentPlugin(localEnv));
 
-//     return config;
-//   },
-//   env: {
-//     REACT_APP_API_KEY: process.env.REACT_APP_API_KEY,
-//     REACT_APP_AUTH_DOMAIN: process.env.REACT_APP_AUTH_DOMAIN,
-//     REACT_APP_DATABASE_URL: process.env.REACT_APP_DATABASE_URL,
-//     REACT_APP_PROJECT_ID: process.env.REACT_APP_PROJECT_ID,
-//     REACT_APP_STORAGE_BUCKET: process.env.REACT_APP_STORAGE_BUCKET,
-//     REACT_APP_MESSAGING_SENDER_ID: process.env.REACT_APP_MESSAGING_SENDER_ID,
-//     REACT_APP_APP_ID: process.env.REACT_APP_APP_ID
-//   }
 // });
