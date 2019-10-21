@@ -37,7 +37,7 @@ const Index = ({}) => {
         <button onClick={() => setAccepted(false)} className="item1">
           NSFW (18+)
         </button>
-        <Link href="/subreddits/sfw">
+        <Link href="/subreddits/pics">
           <button className="item2">Safe for work</button>
         </Link>
         <Link href="/subreddits">

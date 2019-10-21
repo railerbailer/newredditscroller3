@@ -3,6 +3,7 @@ import App from "next/app";
 import Firebase, { FirebaseContext } from "../components/firebase";
 import Head from "next/head";
 import "../App.css";
+import Parser from "ua-parser-js";
 
 class MyApp extends App {
   // Only uncomment this method if you have blocking data requirements for

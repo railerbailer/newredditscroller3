@@ -5,7 +5,7 @@ import {
   artArray,
   foodArray,
   animalsArray
-} from "../subreddits";
+} from "./subredditsArrayConstants.js";
 import _ from "lodash";
 
 export const dataHandler = value => {
@@ -168,10 +168,10 @@ export const dataMapper = (fetchedData, mobile) => {
       (mediaData.image || mediaData.video || mediaData.gif)
     ) {
       convertedSources.push(mediaData);
-      if (convertedSources.length % 8 === 0 || convertedSources.length === 1) {
-        const affiliatedAd = createBannerImage();
-        convertedSources.push(affiliatedAd);
-      }
+      // if (convertedSources.length % 8 === 0 || convertedSources.length === 1) {
+      //   const affiliatedAd = createBannerImage();
+      //   convertedSources.push(affiliatedAd);
+      // }
     }
     return null;
   });

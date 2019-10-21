@@ -10,12 +10,19 @@
   "dependencies": {
     "@zeit/next-css": "^1.0.1",
     "@zeit/webpack-asset-relocator-loader": "^0.6.2",
+    "antd": "^3.24.2",
     "dotenv": "^8.2.0",
     "firebase": "^7.2.1",
+    "isomorphic-unfetch": "^3.0.0",
     "lodash": "^4.17.15",
     "next": "9.1.1",
     "react": "16.10.2",
     "react-dom": "16.10.2",
+    "react-ga": "^2.7.0",
+    "react-lazyload": "2.5.0",
+    "react-swipeable": "^5.4.0",
+    "react-transition-group": "^4.3.0",
+    "ua-parser-js": "^0.7.20",
     "webpack": "^4.41.2"
   }
 }
