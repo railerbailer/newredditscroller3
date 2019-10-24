@@ -329,7 +329,7 @@ const MainDropDownMenu = ({
               changeCat && changeCat("", "sfw");
             }}
           >
-            <Link href="/subreddits/sfw">
+            <Link href="/subreddits/pics">
               <div>
                 <Icon type="heart" />
                 Browse SFW

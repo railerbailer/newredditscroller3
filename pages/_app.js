@@ -3,7 +3,7 @@ import App from "next/app";
 import Firebase, { FirebaseContext } from "../components/firebase";
 import Head from "next/head";
 import "../App.css";
-import Parser from "ua-parser-js";
+import FloatingBalls from "../components/floatingBalls";
 
 class MyApp extends App {
   // Only uncomment this method if you have blocking data requirements for
@@ -30,7 +30,12 @@ class MyApp extends App {
         </Head>
         <FirebaseContext.Provider value={new Firebase()}>
           <FirebaseContext.Consumer>
-            {fb => <Component {...pageProps} firebase={fb} />}
+            {fb => (
+              <>
+                <FloatingBalls />
+                <Component {...pageProps} firebase={fb} />
+              </>
+            )}
           </FirebaseContext.Consumer>
         </FirebaseContext.Provider>
       </>

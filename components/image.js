@@ -61,7 +61,7 @@ const Image = ({
     return (
       <Menu>
         <h4 className="addToCollectionModal">
-          <Icon type="bank" /> <span>Add to bank</span>
+          <Icon type="bank" /> <span>Add wdto bank</span>
           <Icon
             style={{
               float: "right",
@@ -139,7 +139,7 @@ const Image = ({
           className="addNewMediaIcon"
           onBlur={() => setDropDown(false)}
         >
-          {affiliateLink && (
+          {!affiliateLink && (
             <Icon
               style={{ zIndex: fullscreen ? 999 : 2 }}
               className="addNewMediaIcon"

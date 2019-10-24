@@ -1,28 +1,37 @@
-import React, { useState } from "react";
+import React from "react";
+import Link from "next/link";
 const SwitchCategoryButtons = props => {
-  const [nextSubreddit, setNextSubreddit] = useState("");
   const {
     isSearchActivated,
     collectionsMode,
     showListInput,
     isModalVisible,
-    switchCat
+    nextCat,
+    isLoading
   } = props;
   const noInputsActivated =
     !isSearchActivated && !showListInput && !isModalVisible;
+  const switchCat = () => {
+    window.stop();
+    isLoading(true);
+  };
   return (
-    <button
-      ref={button => button && noInputsActivated && button.focus()}
-      className="iconRight"
-    >
-      <i onClick={switchCat} className="material-icons">
-        shuffle
-      </i>
-      <a onClick={switchCat}>
-        Shuffle <br />
-        {collectionsMode ? "collections" : "subreddits"}
-      </a>
-    </button>
+    <Link href={`/subreddits/${nextCat}`}>
+      <button
+        ref={button => button && noInputsActivated && button.focus()}
+        className="iconRight"
+        onClick={switchCat}
+      >
+        <>
+          <i className="material-icons">shuffle</i>
+          <a>
+            Shuffle
+            <br />
+            {collectionsMode ? "collections" : "subreddits"}
+          </a>
+        </>
+      </button>
+    </Link>
   );
 };
 export default SwitchCategoryButtons;

@@ -2,7 +2,7 @@ import React from "react";
 const FloatingBalls = () => {
   return (
     <svg
-      style={{ position: "absolute", zIndex: "1" }}
+      style={{ position: "fixed" }}
       width="100%"
       height="100%"
       // viewBox="0 0 100% 100%"

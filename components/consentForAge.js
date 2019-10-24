@@ -1,6 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
+import { Button } from "antd";
+
 const ConsentForAge = ({ visible, visibilityChange }) => {
+  const [loading, setLoading] = useState(false);
   return (
     visible && (
       <div className="webkitTransform" style={styling.wrapper}>
@@ -16,14 +19,20 @@ const ConsentForAge = ({ visible, visibilityChange }) => {
             <span>Do you want to continue?</span>
             <br />
             <br />
-            <button
+            <Button
               onClick={() => visibilityChange(true)}
               style={styling.button}
             >
               No
-            </button>
+            </Button>
             <Link href="/subreddits/nsfw">
-              <button style={styling.button}>Yes</button>
+              <Button
+                onClick={() => setLoading(true)}
+                loading={loading}
+                style={styling.button}
+              >
+                Yes
+              </Button>
             </Link>
           </div>
         </div>

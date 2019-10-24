@@ -102,6 +102,7 @@ class LoginModal extends Component {
         visible={this.props.isModalVisible}
         onOk={() => this.submitForm()}
         onCancel={this.props.toggleIsModalVisible}
+        okText={registerMode ? "Register" : "Log in"}
       >
         <div className="registerInputField">
           <Input
@@ -209,9 +210,9 @@ class LoginModal extends Component {
                 Reset password
               </a>
             )} */}
-        {!registerMode && (
+        {!registerMode ? (
           <Button
-            style={{ position: "absolute", bottom: "10px", left: "10px" }}
+            style={{ position: "absolute", bottom: 10, left: 10 }}
             onClick={() =>
               this.setState({
                 registerMode: true,
@@ -224,8 +225,17 @@ class LoginModal extends Component {
           >
             Register
           </Button>
+        ) : (
+          <>
+            <PrivacyPolicy />
+            <Button
+              onClick={() => this.setState({ registerMode: false })}
+              style={{ position: "absolute", left: 10, bottom: 10 }}
+            >
+              Back to login
+            </Button>
+          </>
         )}
-        {registerMode && <PrivacyPolicy />}
       </Modal>
     );
   }

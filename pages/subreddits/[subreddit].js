@@ -22,6 +22,7 @@ import Parser from "ua-parser-js";
 
 let sources = [];
 let reload = 0;
+let afterData;
 class Scroller extends Component {
   // static async getInitialProps({ Component, router, ctx }) {
   //   let pageProps = {};
@@ -42,6 +43,8 @@ class Scroller extends Component {
     )
       .then(response => response.json())
       .then(async jsonData => {
+        console.log(jsonData.data.after);
+        afterData = jsonData.data.after;
         return jsonData.data && dataMapper(jsonData.data.children, isMobile);
       })
       .catch(error => console.log("ERROR", error));
@@ -61,19 +64,16 @@ class Scroller extends Component {
     isSearchActivated: false,
     autoCompleteDataSource: [],
     subreddit: "",
-    after: "",
     category: "",
     isModalVisible: false,
     showListInput: false,
     newListName: "",
     userCollections: { "Register to use": "kek" },
     user: null,
-    activeCollection: "",
-    firstLoad: true
+    activeCollection: ""
   };
 
   componentDidMount() {
-    this.setState({ firstLoad: false });
     if (window.screen.availWidth < 800) this.setState({ mobile: true });
     this.props.firebase.auth.onAuthStateChanged(user => {
       if (user) {
@@ -126,14 +126,14 @@ class Scroller extends Component {
     this.setState({
       isOnlyGifsShowing: !this.state.isOnlyGifsShowing
     });
-    closeDropDownAfterAWhile();
+    this.closeDropDownAfterAWhile();
     await this.getSubreddit(this.state.subreddit);
   };
   togglePicsOnly = () => {
     this.setState({
       isOnlyPicsShowing: !this.state.isOnlyPicsShowing
     });
-    closeDropDownAfterAWhile();
+    this.closeDropDownAfterAWhile();
     this.getSubreddit(this.state.subreddit);
   };
   pushToHistory = route => {
@@ -142,16 +142,19 @@ class Scroller extends Component {
 
   switchCat = _.throttle(async () => {
     this.toggleIsLoading(true);
-    window.stop();
+    // window.stop();
     this.toggleDropDown(false);
     this.setActiveCollection("");
     this.setSources([]);
-    !this.state.isLoading &&
-      (await this.getSubreddit(shuffleArray(dataHandler(this.state.category))));
+    // !this.state.isLoading &&
+    //   (await this.getSubreddit(shuffleArray(dataHandler(this.state.category))));
 
     this.toggleIsLoading(false);
+    return shuffleArray(dataHandler(this.state.category));
   }, 250);
+
   goBackinHistory = _.throttle(() => Router.back(), 250);
+
   handleKeyDown = e => {
     if (e.key === "ArrowLeft") {
       this.goBackinHistory();
@@ -189,7 +192,9 @@ class Scroller extends Component {
     message.info(
       `Category is ${cat}, press or swipe right to shuffle subreddit`
     );
-    this.setState({ isDropDownShowing: false });
+    this.setState({
+      isDropDownShowing: false
+    });
   };
 
   addMediaToCollection = (fields, collection) => {
@@ -216,13 +221,12 @@ class Scroller extends Component {
       activeCollection,
       category,
       autoPlayVideo,
-      user,
-      firstLoad
+      user
     } = this.state;
-    const { firebase } = this.props;
-    const mappedData = firstLoad ? this.props.preloadedData : sources;
-    const mediaTitlesArr = mappedData.map(items => items.title);
+    const { firebase, preloadedData } = this.props;
+    const mediaTitlesArr = [preloadedData || []].map(items => items.title);
     const mediaTitles = mediaTitlesArr.join(", ");
+    sources = preloadedData;
     return (
       <Swipeable
         className={`wrapper`}
@@ -305,10 +309,11 @@ class Scroller extends Component {
             isSearchActivated={isSearchActivated}
             showListInput={showListInput}
             isModalVisible={isModalVisible}
-            switchCat={this.switchCat}
+            isLoading={this.toggleIsLoading}
+            nextCat={shuffleArray(dataHandler(this.state.category))}
           />
           <React.Fragment>
-            {this.props.preloadedData || sources.length ? (
+            {sources && sources.length ? (
               <AddMarkup
                 autoPlayVideo={autoPlayVideo}
                 toggleIsModalVisible={this.toggleIsModalVisible}
@@ -322,7 +327,7 @@ class Scroller extends Component {
                 isOnlyGifsShowing={isOnlyGifsShowing}
                 isOnlyPicsShowing={isOnlyPicsShowing}
                 fullscreen={fullscreenActive}
-                dataSource={mappedData}
+                dataSource={sources}
                 loadMore={this.moreSubreddits}
                 isLoading={isLoading}
                 isLoadingMore={isLoadingMore}
@@ -338,7 +343,9 @@ class Scroller extends Component {
               className="subredditNameDiv"
             >
               <h2 className="subredditName">
-                {activeCollection.length ? activeCollection : subreddit}{" "}
+                {activeCollection.length
+                  ? activeCollection
+                  : subreddit || this.props.params}{" "}
                 <Icon type="tag-o" />
               </h2>
             </div>
@@ -358,9 +365,7 @@ class Scroller extends Component {
       .then(response => response.json())
       .then(async jsonData => {
         reload = 0;
-        this.setState({
-          after: jsonData.data.after
-        });
+        afterData = jsonData.data.after;
         sources = dataMapper(jsonData.data.children, this.state.mobile);
         // if (sources.length) {
         //   this.pushToHistory(`/subreddits/${this.state.subreddit}`);
@@ -390,22 +395,26 @@ class Scroller extends Component {
     this.setState({ isLoading: false });
   };
 
-  moreSubreddits = async () => {
+  moreSubreddits = () => {
     this.setState({ isLoadingMore: true });
-    await fetch(
-      `https://www.reddit.com/r/${this.state.subreddit}.json?after=${this.state.after}&limit=100`
+    fetch(
+      `https://www.reddit.com/r/${this.props.params}.json?after=${afterData}&limit=100`,
+      { mode: "no-cors" }
     )
       .then(response => response.json())
-      .then(async jsonData => {
-        this.setState({
-          after: jsonData.data.after
-        });
-        let afterData = dataMapper(jsonData.data.children, this.state.mobile);
+      .then(jsonData => {
+        afterData = jsonData.data.after;
+        let convertedAfterData = dataMapper(
+          jsonData.data.children,
+          this.state.mobile
+        );
         // const haveVideoOrGif = afterData.length && afterData.some(media => media.gif || media.video);
-        sources = sources.concat(afterData);
+        sources = sources.concat(convertedAfterData);
+        // this.forceUpdate();
       })
       .catch(error => {
         message.info(`Can't get more media.`);
+        console.log({ error });
       });
     this.setState({ isLoadingMore: false });
   };

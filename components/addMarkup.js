@@ -46,11 +46,7 @@ class AddMarkup extends Component {
     const haveMoreContent = activeElement + 1 >= html.length;
     if (!this.props.activeCollection.length && haveMoreContent) {
       if (!this.props.isLoadingMore) {
-        try {
-          await this.props.loadMore();
-        } catch (error) {
-          console.log("error", error);
-        }
+        await this.props.loadMore();
       }
       this.setActiveElement(
         haveMoreContent ? activeElement + 1 : activeElement
@@ -354,18 +350,11 @@ class AddMarkup extends Component {
               !isLoading &&
               html.length && (
                 <Button
-                  onClick={async () => {
-                    try {
-                      await this.props.loadMore();
-                    } catch (error) {
-                      console.log("error", error);
-                    }
-                    this.renderHtml();
+                  onClick={() => {
+                    this.props.loadMore();
                   }}
                   type="primary"
-                  icon={
-                    this.props.isLoadingMore ? "loading" : "loading-3-quarters"
-                  }
+                  loading={this.props.isLoadingMore}
                   className="loadMoreButton"
                 >
                   Show more

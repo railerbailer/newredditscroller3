@@ -1,9 +1,11 @@
 html {
   background: rgb(20, 20, 20);
+  font-display: auto;
 }
 body {
+  background: rgb(20, 20, 20);
   font-family: "Varela Round", sans-serif !important;
-  /* font-family: "Roboto", sans-serif; */
+  font-family: "Roboto", sans-serif;
   margin: 0;
   padding: 0;
 }
