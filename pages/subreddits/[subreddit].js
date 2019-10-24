@@ -81,8 +81,10 @@ class Scroller extends Component {
           .ref(`users/${user.uid}`)
           .on("value", snapshot => {
             const collections = _.get(snapshot.val(), "collections", {});
-            snapshot.val() &&
-              this.setState({ userCollections: collections, user });
+            this.setState({
+              userCollections: snapshot.val() && collections,
+              user
+            });
           });
       } else {
         console.log("No user initialized");
@@ -254,7 +256,7 @@ class Scroller extends Component {
           />
           <SearchComponent
             setAutoCompleteDataSource={this.setAutoCompleteDataSource}
-            getSubreddit={this.getSubreddit}
+            pushToHistory={this.pushToHistory}
             dataHandler={dataHandler}
             isSearchActivated={isSearchActivated}
             autoCompleteDataSource={autoCompleteDataSource}

@@ -1,16 +1,17 @@
 import React from "react";
 import { Transition } from "react-transition-group";
 import { Icon, AutoComplete, Button } from "antd";
+import { Router } from "next/router";
 const SearchComponent = props => {
   const {
     setAutoCompleteDataSource,
-    getSubreddit,
     dataHandler,
     isSearchActivated,
     autoCompleteDataSource,
     toggleSearchButton,
     collectionMode,
-    publicCollections
+    publicCollections,
+    pushToHistory
   } = props;
   const handleSearch = value => {
     if (!value) {
@@ -28,7 +29,7 @@ const SearchComponent = props => {
     setAutoCompleteDataSource(result.slice(0, 7));
   };
   const onSelect = async value => {
-    await getSubreddit(value);
+    pushToHistory(`/${collectionMode ? "collections" : "subreddits"}/${value}`);
     toggleSearchButton(false);
   };
   return (

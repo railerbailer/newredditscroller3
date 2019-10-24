@@ -17,6 +17,26 @@ class MyApp extends App {
   //
   //   return { ...appProps }
   // }
+  // state = {
+  //   mobile: false,
+  //   isLoadingMore: false,
+  //   fullscreenActive: false,
+  //   autoPlayVideo: true,
+  //   isDropDownShowing: false,
+  //   isLoading: false,
+  //   isOnlyGifsShowing: false,
+  //   isOnlyPicsShowing: false,
+  //   isSearchActivated: false,
+  //   autoCompleteDataSource: [],
+  //   subreddit: "",
+  //   category: "",
+  //   isModalVisible: false,
+  //   showListInput: false,
+  //   newListName: "",
+  //   userCollections: { "Register to use": "kek" },
+  //   user: null,
+  //   activeCollection: ""
+  // };
 
   render() {
     const { Component, pageProps } = this.props;
@@ -28,12 +48,12 @@ class MyApp extends App {
             rel="stylesheet"
           />
         </Head>
-        <FirebaseContext.Provider value={new Firebase()}>
+        <FirebaseContext.Provider value={{ firebase: new Firebase() }}>
           <FirebaseContext.Consumer>
-            {fb => (
+            {props => (
               <>
                 <FloatingBalls />
-                <Component {...pageProps} firebase={fb} />
+                <Component {...pageProps} firebase={props.firebase} />
               </>
             )}
           </FirebaseContext.Consumer>
