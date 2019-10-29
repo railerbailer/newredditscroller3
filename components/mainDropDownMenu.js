@@ -9,7 +9,7 @@ const MainDropDownMenu = ({
   setSources,
   setActiveCollection,
   toggleShowListInput,
-  isLoadingFetch,
+  isLoading,
   isOnlyGifsShowing,
   isOnlyPicsShowing,
   showListInput,
@@ -296,7 +296,7 @@ const MainDropDownMenu = ({
         width={300}
       >
         <Menu>
-          <Menu.Item disabled={isLoadingFetch}>
+          <Menu.Item disabled={isLoading}>
             <Link href="/subreddits">
               <div>
                 <Icon type="global" /> Browse all subreddits
@@ -305,7 +305,7 @@ const MainDropDownMenu = ({
           </Menu.Item>
 
           <Menu.Item
-            disabled={isLoadingFetch}
+            disabled={isLoading}
             style={{ color: category === "nsfw" ? "#1890ff" : "" }}
             onClick={() => {
               setActiveCollection("");
@@ -321,7 +321,7 @@ const MainDropDownMenu = ({
             </Link>
           </Menu.Item>
           <Menu.Item
-            disabled={isLoadingFetch}
+            disabled={isLoading}
             style={{ color: category === "sfw" ? "#1890ff" : "" }}
             onClick={() => {
               toggleDropDown(false);
@@ -338,7 +338,7 @@ const MainDropDownMenu = ({
           </Menu.Item>
           <Menu.Divider />
           <Menu.Item
-            disabled={isLoadingFetch}
+            disabled={isLoading}
             onClick={() => {
               toggleDropDown(false);
             }}
@@ -350,13 +350,13 @@ const MainDropDownMenu = ({
             </Link>
           </Menu.Item>
           <Menu.Divider />
-          <Menu.Item disabled={isLoadingFetch}>
+          <Menu.Item disabled={isLoading}>
             <h4>
               <Icon type="bank" /> My banks{!user && " (Log in required)"}
             </h4>
           </Menu.Item>
           {user && (
-            <Menu.Item disabled={isLoadingFetch}>
+            <Menu.Item disabled={isLoading}>
               <Icon
                 onClick={() =>
                   newListName.length
@@ -397,12 +397,12 @@ const MainDropDownMenu = ({
           )}
           {user && listMenuItem}
           <Menu.Divider />
-          <Menu.Item disabled={isLoadingFetch} onClick={showFeedbackModal}>
+          <Menu.Item disabled={isLoading} onClick={showFeedbackModal}>
             <Icon type="bulb" />
             Feedback
           </Menu.Item>
           <Menu.Divider />
-          <Menu.Item disabled={isLoadingFetch}>
+          <Menu.Item disabled={isLoading}>
             {user ? (
               <div onClick={() => logOut()}>
                 <Icon type="logout" /> Log out{" "}

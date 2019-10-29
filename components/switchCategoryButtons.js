@@ -7,13 +7,13 @@ const SwitchCategoryButtons = props => {
     showListInput,
     isModalVisible,
     nextCat,
-    isLoading
+    toggleIsLoading
   } = props;
   const noInputsActivated =
     !isSearchActivated && !showListInput && !isModalVisible;
   const switchCat = () => {
     window.stop();
-    isLoading(true);
+    toggleIsLoading(true);
   };
   return (
     <Link href={`/subreddits/${nextCat}`}>

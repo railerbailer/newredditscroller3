@@ -5,7 +5,7 @@ import "antd/dist/antd.css";
 import "../../App.css";
 import _ from "lodash";
 import AddMarkup from "../../components/addMarkup";
-import { Icon, message, Spin } from "antd";
+import { Icon, message, Empty } from "antd";
 import {
   dataHandler,
   shuffleArray,
@@ -23,17 +23,8 @@ import Parser from "ua-parser-js";
 let sources = [];
 let reload = 0;
 let afterData;
+const randomSubreddit = c => shuffleArray(dataHandler(c));
 class Scroller extends Component {
-  // static async getInitialProps({ Component, router, ctx }) {
-  //   let pageProps = {};
-
-  //   if (Component.getInitialProps) {
-  //     pageProps = await Component.getInitialProps(ctx);
-  //   }
-
-  //   return { pageProps };
-  // }
-
   static async getInitialProps({ req, query }) {
     const { subreddit } = query;
     const userAgent = req && Parser(req.headers["user-agent"]);
@@ -43,7 +34,6 @@ class Scroller extends Component {
     )
       .then(response => response.json())
       .then(async jsonData => {
-        console.log(jsonData.data.after);
         afterData = jsonData.data.after;
         return jsonData.data && dataMapper(jsonData.data.children, isMobile);
       })
@@ -52,36 +42,16 @@ class Scroller extends Component {
     return { params: subreddit, preloadedData };
   }
 
-  state = {
-    mobile: false,
-    isLoadingMore: false,
-    fullscreenActive: false,
-    autoPlayVideo: true,
-    isDropDownShowing: false,
-    isLoading: false,
-    isOnlyGifsShowing: false,
-    isOnlyPicsShowing: false,
-    isSearchActivated: false,
-    autoCompleteDataSource: [],
-    subreddit: "",
-    category: "",
-    isModalVisible: false,
-    showListInput: false,
-    newListName: "",
-    userCollections: { "Register to use": "kek" },
-    user: null,
-    activeCollection: ""
-  };
-
   componentDidMount() {
-    if (window.screen.availWidth < 800) this.setState({ mobile: true });
+    if (window.screen.availWidth < 800)
+      this.props.changeContext({ mobile: true });
     this.props.firebase.auth.onAuthStateChanged(user => {
       if (user) {
         this.props.firebase.db
           .ref(`users/${user.uid}`)
           .on("value", snapshot => {
             const collections = _.get(snapshot.val(), "collections", {});
-            this.setState({
+            this.props.changeContext({
               userCollections: snapshot.val() && collections,
               user
             });
@@ -100,69 +70,80 @@ class Scroller extends Component {
   }
 
   setSources = value => (sources = value);
-  setNewListName = listName => this.setState({ newListName: listName });
-  toggleShowListInput = bool => this.setState({ showListInput: bool });
-  toggleAutoPlayVideo = bool => this.setState({ autoPlayVideo: bool });
+  setNewListName = listName =>
+    this.props.changeContext({ newListName: listName });
+  toggleShowListInput = bool =>
+    this.props.changeContext({ showListInput: bool });
+  toggleAutoPlayVideo = bool =>
+    this.props.changeContext({ autoPlayVideo: bool });
   setActiveCollection = collection =>
-    this.setState({ activeCollection: collection });
-  toggleIsLoading = state => this.setState({ isLoading: state });
+    this.props.changeContext({ activeCollection: collection });
+  toggleIsLoading = state => {
+    this.props.changeContext({ isLoading: state });
+  };
   toggleFullscreen = () =>
-    !this.state.isSearchActivated &&
-    this.setState({ fullscreenActive: !this.state.fullscreenActive });
+    !this.props.context.isSearchActivated &&
+    this.props.changeContext({
+      fullscreen: !this.props.context.fullscreen
+    });
   toggleIsModalVisible = () =>
-    this.setState({ isModalVisible: !this.state.isModalVisible });
-  toggleSearchButton = value => this.setState({ isSearchActivated: value });
-  categorySet = val => this.setState({ category: val });
+    this.props.changeContext({
+      isModalVisible: !this.props.context.isModalVisible
+    });
+  toggleSearchButton = value =>
+    this.props.changeContext({ isSearchActivated: value });
+  categorySet = val => this.props.changeContext({ category: val });
   setAutoCompleteDataSource = value =>
-    this.setState({ autoCompleteDataSource: value });
-  toggleDropDown = value => this.setState({ isDropDownShowing: value });
+    this.props.changeContext({ autoCompleteDataSource: value });
+  toggleDropDown = value =>
+    this.props.changeContext({ isDropDownShowing: value });
   closeDropDownAfterAWhile = () =>
     setTimeout(
       () =>
-        this.setState({
+        this.props.changeContext({
           isDropDownShowing: false
         }),
       1500
     );
   toggleGifsOnly = async () => {
-    this.setState({
-      isOnlyGifsShowing: !this.state.isOnlyGifsShowing
+    this.props.changeContext({
+      isOnlyGifsShowing: !this.props.context.isOnlyGifsShowing
     });
     this.closeDropDownAfterAWhile();
-    await this.getSubreddit(this.state.subreddit);
+    await this.getSubreddit(this.props.context.subreddit);
   };
   togglePicsOnly = () => {
-    this.setState({
-      isOnlyPicsShowing: !this.state.isOnlyPicsShowing
+    this.props.changeContext({
+      isOnlyPicsShowing: !this.props.context.isOnlyPicsShowing
     });
     this.closeDropDownAfterAWhile();
-    this.getSubreddit(this.state.subreddit);
+    this.getSubreddit(this.props.context.subreddit);
   };
   pushToHistory = route => {
     Router.push(route);
   };
 
-  switchCat = _.throttle(async () => {
+  switchCat = _.throttle(() => {
+    const { category, mode, isLoading } = this.props.context;
     this.toggleIsLoading(true);
     // window.stop();
     this.toggleDropDown(false);
     this.setActiveCollection("");
     this.setSources([]);
-    // !this.state.isLoading &&
-    //   (await this.getSubreddit(shuffleArray(dataHandler(this.state.category))));
 
-    this.toggleIsLoading(false);
-    return shuffleArray(dataHandler(this.state.category));
+    !isLoading &&
+      Router.push(`/${mode || "subreddits"}/${randomSubreddit(category)}`);
   }, 250);
 
-  goBackinHistory = _.throttle(() => Router.back(), 250);
+  goBackinHistory =
+    !this.props.context.isLoading && _.throttle(() => Router.back(), 250);
 
   handleKeyDown = e => {
     if (e.key === "ArrowLeft") {
       this.goBackinHistory();
     }
     if (e.key === "Escape") {
-      this.setState({ fullscreenActive: false });
+      this.props.changeContext({ fullscreen: false });
     }
     if (e.key === "a") {
       this.goBackinHistory();
@@ -176,15 +157,19 @@ class Scroller extends Component {
     }
   };
 
-  swipedLeft = (e, absX, isFlick) => {
-    if (isFlick || absX > 30) {
-      this.switchCat();
-    }
-  };
+  onSwiped = ({ absX, velocity, dir }) => {
+    console.log(absX, velocity, dir);
+    if (velocity < 0.5 && absX < 30) return;
+    switch (dir) {
+      case "Right":
+        this.goBackinHistory();
+        return;
+      case "Left":
+        this.switchCat();
+        return;
 
-  swipedRight = (e, absX, isFlick) => {
-    if (isFlick || absX > 30) {
-      this.goBackinHistory();
+      default:
+        return;
     }
   };
 
@@ -194,13 +179,13 @@ class Scroller extends Component {
     message.info(
       `Category is ${cat}, press or swipe right to shuffle subreddit`
     );
-    this.setState({
+    this.props.changeContext({
       isDropDownShowing: false
     });
   };
 
   addMediaToCollection = (fields, collection) => {
-    this.state.user
+    this.props.context.user
       ? this.props.firebase.updateDataToCollection({ ...fields }, collection)
       : this.toggleIsModalVisible();
   };
@@ -211,7 +196,7 @@ class Scroller extends Component {
       isSearchActivated,
       isDropDownShowing,
       autoCompleteDataSource,
-      fullscreenActive,
+      fullscreen,
       isLoading,
       subreddit,
       isOnlyGifsShowing,
@@ -222,155 +207,161 @@ class Scroller extends Component {
       userCollections,
       activeCollection,
       category,
-      autoPlayVideo,
-      user
-    } = this.state;
+      user,
+      autoPlayVideo
+    } = this.props.context;
     const { firebase, preloadedData } = this.props;
     const mediaTitlesArr = [preloadedData || []].map(items => items.title);
     const mediaTitles = mediaTitlesArr.join(", ");
     sources = preloadedData;
     return (
-      <Swipeable
-        className={`wrapper`}
+      <div
         onKeyDown={
           !isModalVisible && !showListInput && !isSearchActivated
             ? this.handleKeyDown
             : undefined
         }
-        onSwipedLeft={this.swipedLeft}
-        onSwipedRight={this.swipedRight}
       >
-        <Head>
-          <title>{this.state.subreddit}</title>
-          <meta
-            name="description"
-            content={`Showing images and gifs from subreddit ${this.props.params}`}
-          />
-          <meta name="keywords" content={mediaTitles} />
-        </Head>
-        <div className="topbarZen">
-          <LoginModal
-            firebase={firebase}
-            toggleIsModalVisible={this.toggleIsModalVisible}
-            isModalVisible={this.state.isModalVisible}
-          />
-          <SearchComponent
-            setAutoCompleteDataSource={this.setAutoCompleteDataSource}
-            pushToHistory={this.pushToHistory}
-            dataHandler={dataHandler}
-            isSearchActivated={isSearchActivated}
-            autoCompleteDataSource={autoCompleteDataSource}
-            toggleSearchButton={this.toggleSearchButton}
-          />
-          <GoBackButton goBackFunc={this.goBackinHistory} />
-          <MainDropDownMenu
-            isLoadingFetch={this.state.isLoading}
-            autoPlayVideo={autoPlayVideo}
-            toggleAutoPlayVideo={this.toggleAutoPlayVideo}
-            isDropDownShowing={isDropDownShowing}
-            setSources={this.setSources}
-            isOnlyGifsShowing={isOnlyGifsShowing}
-            isOnlyPicsShowing={isOnlyPicsShowing}
-            category={category}
-            showListInput={showListInput}
-            userCollections={userCollections}
-            activeCollection={activeCollection}
-            user={user}
-            toggleDropDown={this.toggleDropDown}
-            toggleIsModalVisible={this.toggleIsModalVisible}
-            setActiveCollection={this.setActiveCollection}
-            toggleGifsOnly={this.toggleGifsOnly}
-            togglePicsOnly={this.togglePicsOnly}
-            changeCat={this.changeCat}
-            toggleShowListInput={this.toggleShowListInput}
-            firebase={firebase}
-            pushToHistory={this.pushToHistory}
-          />
-        </div>
-        <div
-          onClick={() => this.toggleDropDown(false)}
-          className={`contentZen ${fullscreenActive && "fullscreen"}`}
-        >
-          {reload > 6 && (
-            <div
-              onClick={() =>
-                this.getSubreddit(
-                  shuffleArray(dataHandler(this.state.category))
-                )
-              }
-              className="internetProblemReload"
-            >
-              <Icon
-                style={{ color: "white", fontSize: 30 }}
-                type="disconnect"
-              />
-              <p>Press to reload</p>
-            </div>
-          )}
-          <SwitchCategoryButtons
-            isSearchActivated={isSearchActivated}
-            showListInput={showListInput}
-            isModalVisible={isModalVisible}
-            isLoading={this.toggleIsLoading}
-            nextCat={shuffleArray(dataHandler(this.state.category))}
-          />
-          <React.Fragment>
-            {sources && sources.length ? (
-              <AddMarkup
-                autoPlayVideo={autoPlayVideo}
-                toggleIsModalVisible={this.toggleIsModalVisible}
-                activeCollection={this.state.activeCollection}
-                collections={userCollections}
-                addMediaToCollection={this.addMediaToCollection}
-                isSearchActivated={isSearchActivated}
-                toggleFullscreen={this.toggleFullscreen}
-                toggleIsLoading={this.toggleIsLoading}
-                mobile={mobile}
-                isOnlyGifsShowing={isOnlyGifsShowing}
-                isOnlyPicsShowing={isOnlyPicsShowing}
-                fullscreen={fullscreenActive}
-                dataSource={sources}
-                loadMore={this.moreSubreddits}
-                isLoading={isLoading}
-                isLoadingMore={isLoadingMore}
-              />
-            ) : (
-              <div className="iconSpinner">
-                <Spin size="large" />
+        <Swipeable className={`wrapper`} onSwiped={this.onSwiped}>
+          <Head>
+            <title>{this.props.context.subreddit}</title>
+            <meta
+              name="description"
+              content={`Showing images and gifs from subreddit ${this.props.params}`}
+            />
+            <meta name="keywords" content={mediaTitles} />
+          </Head>
+          <div className="topbarZen">
+            <LoginModal
+              firebase={firebase}
+              toggleIsModalVisible={this.toggleIsModalVisible}
+              isModalVisible={this.props.context.isModalVisible}
+            />
+            <SearchComponent
+              setAutoCompleteDataSource={this.setAutoCompleteDataSource}
+              pushToHistory={this.pushToHistory}
+              dataHandler={dataHandler}
+              isSearchActivated={isSearchActivated}
+              autoCompleteDataSource={autoCompleteDataSource}
+              toggleSearchButton={this.toggleSearchButton}
+            />
+            <GoBackButton goBackFunc={this.goBackinHistory} />
+            <MainDropDownMenu
+              isLoading={this.props.context.isLoading}
+              autoPlayVideo={autoPlayVideo}
+              toggleAutoPlayVideo={this.toggleAutoPlayVideo}
+              isDropDownShowing={isDropDownShowing}
+              setSources={this.setSources}
+              isOnlyGifsShowing={isOnlyGifsShowing}
+              isOnlyPicsShowing={isOnlyPicsShowing}
+              category={category}
+              showListInput={showListInput}
+              userCollections={userCollections}
+              activeCollection={activeCollection}
+              user={user}
+              toggleDropDown={this.toggleDropDown}
+              toggleIsModalVisible={this.toggleIsModalVisible}
+              setActiveCollection={this.setActiveCollection}
+              toggleGifsOnly={this.toggleGifsOnly}
+              togglePicsOnly={this.togglePicsOnly}
+              changeCat={this.changeCat}
+              toggleShowListInput={this.toggleShowListInput}
+              firebase={firebase}
+              pushToHistory={this.pushToHistory}
+            />
+          </div>
+          <div
+            onClick={() => this.toggleDropDown(false)}
+            className={`contentZen ${fullscreen && "fullscreen"}`}
+          >
+            {reload > 6 && (
+              <div
+                onClick={() =>
+                  this.getSubreddit(
+                    shuffleArray(dataHandler(this.props.context.category))
+                  )
+                }
+                className="internetProblemReload"
+              >
+                <Icon
+                  style={{ color: "white", fontSize: 30 }}
+                  type="disconnect"
+                />
+                <p>Press to reload</p>
               </div>
             )}
+            <SwitchCategoryButtons
+              isSearchActivated={isSearchActivated}
+              showListInput={showListInput}
+              isModalVisible={isModalVisible}
+              toggleIsLoading={this.toggleIsLoading}
+              nextCat={shuffleArray(dataHandler(this.props.context.category))}
+            />
+            <React.Fragment>
+              {sources && sources.length ? (
+                <AddMarkup
+                  context={this.props.context}
+                  changeContext={this.props.changeContext}
+                  activeCollection={this.props.context.activeCollection}
+                  collections={userCollections}
+                  addMediaToCollection={this.addMediaToCollection}
+                  isSearchActivated={isSearchActivated}
+                  toggleFullscreen={this.toggleFullscreen}
+                  toggleIsLoading={this.toggleIsLoading}
+                  mobile={mobile}
+                  isOnlyGifsShowing={isOnlyGifsShowing}
+                  isOnlyPicsShowing={isOnlyPicsShowing}
+                  fullscreen={fullscreen}
+                  dataSource={sources}
+                  loadMore={this.moreSubreddits}
+                  isLoading={isLoading}
+                  isLoadingMore={isLoadingMore}
+                />
+              ) : (
+                <div className="iconSpinner">
+                  <Empty
+                    onClick={this.switchCat}
+                    description="Press to load new subreddit!"
+                  />{" "}
+                  <br />
+                </div>
+              )}
 
-            <div
-              style={{ opacity: isSearchActivated ? 0.1 : 1 }}
-              className="subredditNameDiv"
-            >
-              <h2 className="subredditName">
-                {activeCollection.length
-                  ? activeCollection
-                  : subreddit || this.props.params}{" "}
-                <Icon type="tag-o" />
-              </h2>
-            </div>
-          </React.Fragment>
-          )}
-        </div>
-      </Swipeable>
+              <div
+                style={{ opacity: isSearchActivated ? 0.1 : 1 }}
+                className="subredditNameDiv"
+              >
+                <h2 className="subredditName">
+                  {activeCollection.length
+                    ? activeCollection
+                    : subreddit || this.props.params}{" "}
+                  <Icon type="tag-o" />
+                </h2>
+              </div>
+            </React.Fragment>
+            )}
+          </div>
+        </Swipeable>
+      </div>
     );
   }
 
   getSubreddit = async (subreddit, notShowLoad) => {
-    await this.setState({ subreddit: subreddit, isLoading: !notShowLoad });
+    await this.props.changeContext({
+      subreddit: subreddit,
+      isLoading: !notShowLoad
+    });
     sources = [];
     await fetch(
-      `https://www.reddit.com/r/${this.state.subreddit}.json?limit=100`
+      `https://www.reddit.com/r/${this.props.context.subreddit}.json?limit=100`
     )
       .then(response => response.json())
       .then(async jsonData => {
         reload = 0;
         afterData = jsonData.data.after;
-        sources = dataMapper(jsonData.data.children, this.state.mobile);
+        sources = dataMapper(jsonData.data.children, this.props.context.mobile);
         // if (sources.length) {
-        //   this.pushToHistory(`/subreddits/${this.state.subreddit}`);
+        //   this.pushToHistory(`/subreddits/${this.props.context.subreddit}`);
         // }
         // const haveVideoOrGif = sources.length && sources.some(media => media.gif || media.video);
       })
@@ -379,7 +370,7 @@ class Scroller extends Component {
         reload = reload + 1;
         if (reload < 10 && !sources.length)
           await this.getSubreddit(
-            shuffleArray(dataHandler(this.state.category))
+            shuffleArray(dataHandler(this.props.context.category))
           );
         else {
           alert(
@@ -389,36 +380,39 @@ class Scroller extends Component {
       });
     // if (reload < 10) {
     //   if (!sources.length) {
-    //     await this.getSubreddit(shuffleArray(dataHandler(this.state.category)));
+    //     await this.getSubreddit(shuffleArray(dataHandler(this.props.context.category)));
     //   } else {
-    //     this.setState({ isLoading: false });
+    //     this.props.changeContext({ isLoading: false });
     //   }
     // }
-    this.setState({ isLoading: false });
+    this.props.changeContext({ isLoading: false });
   };
 
-  moreSubreddits = () => {
-    this.setState({ isLoadingMore: true });
-    fetch(
-      `https://www.reddit.com/r/${this.props.params}.json?after=${afterData}&limit=100`,
-      { mode: "no-cors" }
+  moreSubreddits = async () => {
+    this.props.changeContext({ isLoadingMore: true });
+    await fetch(
+      `https://www.reddit.com/r/${this.props.params}.json?after=${afterData}&limit=100`
     )
       .then(response => response.json())
       .then(jsonData => {
         afterData = jsonData.data.after;
         let convertedAfterData = dataMapper(
           jsonData.data.children,
-          this.state.mobile
+          this.props.context.mobile
         );
         // const haveVideoOrGif = afterData.length && afterData.some(media => media.gif || media.video);
+        if (!convertedAfterData.length) {
+          message.info(`Can't get more media.`);
+        }
         sources = sources.concat(convertedAfterData);
-        // this.forceUpdate();
+        this.forceUpdate();
       })
       .catch(error => {
         message.info(`Can't get more media.`);
         console.log({ error });
       });
-    this.setState({ isLoadingMore: false });
+    this.forceUpdate();
+    this.props.changeContext({ isLoadingMore: false });
   };
 }
 

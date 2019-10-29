@@ -30,12 +30,13 @@ button {
   bottom: 0px;
   right: 0px;
   padding: 20px;
+  max-width: 75px;
   padding-right: 8px;
   padding-bottom: 0;
   font-size: 22px;
 }
 .fullscreen .linkToSource {
-  left: -5px;
+  left: -10px;
   bottom: 70px;
   font-size: 22px;
 }
@@ -209,7 +210,7 @@ i {
   opacity: 0.9;
 
   color: white !important;
-  filter: drop-shadow(1px 1px black);
+  filter: drop-shadow(0.7px 0.7px rgb(24, 144, 255));
 }
 .fullscreenScroll .addNewMediaIcon {
   font-size: 34px;
@@ -642,6 +643,11 @@ button {
   width: 58px !important;
   height: 68px;
 }
+
+.iconRight a {
+  color: white;
+}
+
 .iconRight i {
   font-size: 36px;
 }
@@ -660,16 +666,13 @@ button {
 }
 .iconLeft,
 .iconRight {
-  text-shadow: 1px 1px black;
+  text-shadow: 0.6px 0.7px rgb(24, 144, 255);
   cursor: pointer;
   position: absolute;
   background-color: transparent;
-
   opacity: 0.9;
-
   width: 36px;
   position: fixed;
-
   bottom: 0px;
   z-index: 7;
   color: white;
@@ -819,7 +822,7 @@ button {
 
 .searchWrapper {
   position: relative;
-
+  width: 200px;
   z-index: 6;
 }
 .searchWrapper button {
@@ -859,6 +862,7 @@ button {
   height: 100%;
   min-height: 100vh;
 }
+
 .userCollectionContent {
   background: rgb(20, 20, 20);
   height: 100%;
@@ -867,10 +871,9 @@ button {
   text-align: right;
   color: white;
   position: fixed;
-  top: 46px;
+  top: 56px;
   background: transparent;
-  left: -1px;
-  /* font-size: 28px; */
+  left: 2px;
   filter: drop-shadow(1px 1px black);
 }
 .cardGrid {
@@ -941,6 +944,7 @@ h1 {
 }
 .subredditsList a:link {
   color: #1890ff;
+  z-index: 1;
 }
 .subredditsList a:visited {
   color: hotpink;

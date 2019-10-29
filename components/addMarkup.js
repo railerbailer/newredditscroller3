@@ -24,6 +24,12 @@ class AddMarkup extends Component {
       this.setState({ activeElement: 0 });
     }
   }
+
+  loadMoreContent = async () => {
+    await this.props.loadMore();
+    this.renderHtml();
+  };
+
   setActiveElement = value => {
     this.setState({ activeElement: value });
   };
@@ -43,7 +49,7 @@ class AddMarkup extends Component {
   }, 100);
   getNextElement = throttle(async () => {
     const { activeElement } = this.state;
-    const haveMoreContent = activeElement + 1 >= html.length;
+    const haveMoreContent = activeElement + 2 >= html.length;
     if (!this.props.activeCollection.length && haveMoreContent) {
       if (!this.props.isLoadingMore) {
         await this.props.loadMore();
@@ -108,18 +114,20 @@ class AddMarkup extends Component {
     return id;
   };
 
-  renderHtml = () => {
+  renderHtml = dataSource => {
     const {
       isOnlyPicsShowing,
       isOnlyGifsShowing,
       mobile,
       fullscreen,
-      dataSource,
       addMediaToCollection,
       collections,
       autoPlayVideo
     } = this.props;
-    let filteredData;
+    if (!dataSource) {
+      dataSource = this.props.dataSource;
+    }
+    let filteredData = [];
     if (mobile) filteredData = dataSource.filter(item => !item.gif);
     if (!isOnlyGifsShowing && isOnlyPicsShowing)
       filteredData = dataSource.filter(item => item.image);
@@ -265,6 +273,7 @@ class AddMarkup extends Component {
       });
   };
   render() {
+    this.renderHtml(this.props.dataSource);
     const { activeElement } = this.state;
     const {
       fullscreen,
@@ -273,96 +282,96 @@ class AddMarkup extends Component {
       activeCollection,
       isLoading
     } = this.props;
-    this.renderHtml();
     return (
-      <Swipeable
-        onKeyDown={e => this.handleKeyDown(e)}
-        onSwipedDown={this.swipedDown}
-        onSwipedUp={this.swipedUp}
-        style={{ backgroundColor: "rgb(20, 20, 20)" }}
-      >
-        {html.length &&
-          (fullscreen ? (
-            <div
-              style={{
-                opacity: isLoading ? 0.1 : 1,
-                transition: "opacity 400ms"
-              }}
-              className="fullscreenScroll"
-            >
-              <Icon
-                type="close"
-                className="closeFullScreen"
-                onClick={() => this.getElementIndex(activeElement)}
-              />
-
+      <div onKeyDown={e => this.handleKeyDown(e)}>
+        <Swipeable
+          onSwipedDown={this.swipedDown}
+          onSwipedUp={this.swipedUp}
+          style={{ backgroundColor: "rgb(20, 20, 20)" }}
+        >
+          {html.length &&
+            (fullscreen ? (
               <div
-                style={{ zIndex: isLoadingMore ? 10 : fullscreen ? 0 : 0 }}
-                className="loadingMoreSpinner"
+                style={{
+                  opacity: isLoading ? 0.1 : 1,
+                  transition: "opacity 400ms"
+                }}
+                className="fullscreenScroll"
               >
-                <svg xmlns="http://www.w3.org/2000/svg">
-                  <path fill="#FFF" d={carPath} />
-                </svg>
-              </div>
+                <Icon
+                  type="close"
+                  className="closeFullScreen"
+                  onClick={() => this.getElementIndex(activeElement)}
+                />
 
-              {html[activeElement]}
-              {html[activeElement + 1] && html[activeElement + 1]}
-              {/* {html[activeElement + 1]} */}
-              {/* {(!mobile || activeElement > 2) && html[activeElement + 2]}
+                <div
+                  style={{ zIndex: isLoadingMore ? 10 : fullscreen ? 0 : 0 }}
+                  className="loadingMoreSpinner"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg">
+                    <path fill="#FFF" d={carPath} />
+                  </svg>
+                </div>
+
+                {html[activeElement]}
+                {html[activeElement + 1] && html[activeElement + 1]}
+                {/* {html[activeElement + 1]} */}
+                {/* {(!mobile || activeElement > 2) && html[activeElement + 2]}
               {activeElement > 5 && html[activeElement + 3]}
               {(!mobile || activeElement > 9) && html[activeElement + 4]} */}
 
-              <div
-                className="fullscreenButtonNext"
-                onClick={() => this.getNextElement()}
-              >
-                <Icon autoFocus type="up" />
-                <span>Show more</span>
-              </div>
-              {!this.props.isSearchActivated && (
-                <button
-                  className="inputFocus"
-                  ref={button => button && button.focus()}
-                />
-              )}
-            </div>
-          ) : (
-            <div
-              style={{
-                opacity: isLoading ? 0.1 : 1,
-                transition: "opacity 400ms"
-              }}
-              className="gridMedia"
-            >
-              {html}
-            </div>
-          ))}
-        {isLoading && (
-          <div className="iconSpinner">
-            <Spin size="large" />
-          </div>
-        )}
-
-        {!fullscreen && (
-          <div className="loadMoreWrapper">
-            {!collectionsMode &&
-              !activeCollection.length &&
-              !isLoading &&
-              html.length && (
-                <Button
-                  onClick={() => {
-                    this.props.loadMore();
-                  }}
-                  type="primary"
-                  loading={this.props.isLoadingMore}
-                  className="loadMoreButton"
+                <div
+                  className="fullscreenButtonNext"
+                  onClick={() => this.getNextElement()}
                 >
-                  Show more
-                </Button>
-              )}
-          </div>
-        )}
-      </Swipeable>
+                  <Icon autoFocus type="up" />
+                  <span>Show more</span>
+                </div>
+                {!this.props.isSearchActivated && (
+                  <button
+                    className="inputFocus"
+                    ref={button => button && button.focus()}
+                  />
+                )}
+              </div>
+            ) : (
+              <div
+                style={{
+                  opacity: isLoading ? 0.1 : 1,
+                  transition: "opacity 400ms"
+                }}
+                className="gridMedia"
+              >
+                {html}
+              </div>
+            ))}
+          {isLoading && (
+            <div className="iconSpinner">
+              <Spin size="large" />
+            </div>
+          )}
+
+          {!fullscreen && (
+            <div className="loadMoreWrapper">
+              {!collectionsMode &&
+                !activeCollection.length &&
+                !isLoading &&
+                html.length && (
+                  <Button
+                    onClick={() => {
+                      this.loadMoreContent();
+                    }}
+                    type="primary"
+                    loading={this.props.isLoadingMore}
+                    className="loadMoreButton"
+                  >
+                    Show more
+                  </Button>
+                )}
+            </div>
+          )}
+        </Swipeable>
+      </div>
     );
   }
 }

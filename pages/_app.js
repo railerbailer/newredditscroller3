@@ -17,26 +17,29 @@ class MyApp extends App {
   //
   //   return { ...appProps }
   // }
-  // state = {
-  //   mobile: false,
-  //   isLoadingMore: false,
-  //   fullscreenActive: false,
-  //   autoPlayVideo: true,
-  //   isDropDownShowing: false,
-  //   isLoading: false,
-  //   isOnlyGifsShowing: false,
-  //   isOnlyPicsShowing: false,
-  //   isSearchActivated: false,
-  //   autoCompleteDataSource: [],
-  //   subreddit: "",
-  //   category: "",
-  //   isModalVisible: false,
-  //   showListInput: false,
-  //   newListName: "",
-  //   userCollections: { "Register to use": "kek" },
-  //   user: null,
-  //   activeCollection: ""
-  // };
+  state = {
+    mobile: false,
+    isLoadingMore: false,
+    fullscreen: false,
+    autoPlayVideo: true,
+    isDropDownShowing: false,
+    isLoading: false,
+    isOnlyGifsShowing: false,
+    isOnlyPicsShowing: false,
+    isSearchActivated: false,
+    autoCompleteDataSource: [],
+    subreddit: "",
+    category: "",
+    isModalVisible: false,
+    showListInput: false,
+    userCollections: { "Register to use": "kek" },
+    user: null,
+    activeCollection: ""
+  };
+
+  changeState = state => {
+    this.setState(state);
+  };
 
   render() {
     const { Component, pageProps } = this.props;
@@ -48,12 +51,23 @@ class MyApp extends App {
             rel="stylesheet"
           />
         </Head>
-        <FirebaseContext.Provider value={{ firebase: new Firebase() }}>
+        <FirebaseContext.Provider
+          value={{
+            firebase: new Firebase(),
+            context: this.state,
+            changeContext: this.changeState
+          }}
+        >
           <FirebaseContext.Consumer>
             {props => (
               <>
                 <FloatingBalls />
-                <Component {...pageProps} firebase={props.firebase} />
+                <Component
+                  {...pageProps}
+                  firebase={props.firebase}
+                  context={props.context}
+                  changeContext={props.changeContext}
+                />
               </>
             )}
           </FirebaseContext.Consumer>

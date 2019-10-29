@@ -61,11 +61,6 @@ const Index = ({}) => {
                 Safe for work
               </button>
             </Link>
-            <Link href="/subreddits">
-              <a onClick={() => setLoading(true)} className="item3">
-                Browse all subreddits
-              </a>
-            </Link>
           </div>
 
           <div

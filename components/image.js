@@ -17,7 +17,6 @@ const Image = ({
   toggleFullscreen,
   index,
   ratioClassName,
-  toggleIsModalVisible,
   addMediaToCollection,
   firebaseId,
   fullscreen,

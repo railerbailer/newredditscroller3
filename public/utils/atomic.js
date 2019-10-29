@@ -8,7 +8,7 @@ import {
 } from "./subredditsArrayConstants.js";
 import _ from "lodash";
 
-export const dataHandler = value => {
+export const dataHandler = (value = "") => {
   let lowerCaseCategory = value.toLowerCase();
   if (lowerCaseCategory === "nsfw") {
     return _.uniq(straight);
