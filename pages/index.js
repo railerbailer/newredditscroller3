@@ -6,7 +6,7 @@ import Link from "next/link";
 import "../App.css";
 
 const Index = ({}) => {
-  const [accepted, setAccepted] = useState(true);
+  const [consent, setConsent] = useState(false);
   const [loading, setLoading] = useState(false);
 
   return (
@@ -24,10 +24,10 @@ const Index = ({}) => {
       {loading ? (
         <div
           style={{
-            zIndex: 1337,
+            zIndex: 11231312313212337,
             width: "100%",
             textAlign: "center",
-            position: "absolute",
+            position: "fixed",
             color: "white",
             top: "40vh"
           }}
@@ -37,7 +37,7 @@ const Index = ({}) => {
       ) : (
         <>
           <h1 className="scrollLogo">sliddit.</h1>
-          <ConsentForAge visible={!accepted} visibilityChange={setAccepted} />
+          <ConsentForAge visible={consent} visibilityChange={setConsent} />
           <div className="grid-container">
             )}
             <h2 className="item0">
@@ -49,8 +49,7 @@ const Index = ({}) => {
             </h2>
             <button
               onClick={() => {
-                setAccepted(false);
-                setLoading(true);
+                setConsent(true);
               }}
               className="item1"
             >

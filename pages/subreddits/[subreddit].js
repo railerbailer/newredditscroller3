@@ -247,6 +247,7 @@ class Scroller extends Component {
             />
             <GoBackButton goBackFunc={this.goBackinHistory} />
             <MainDropDownMenu
+              toggleIsLoading={this.toggleIsLoading}
               isLoading={this.props.context.isLoading}
               autoPlayVideo={autoPlayVideo}
               toggleAutoPlayVideo={this.toggleAutoPlayVideo}

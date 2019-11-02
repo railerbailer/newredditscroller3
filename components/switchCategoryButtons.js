@@ -16,7 +16,9 @@ const SwitchCategoryButtons = props => {
     toggleIsLoading(true);
   };
   return (
-    <Link href={`/subreddits/${nextCat}`}>
+    <Link
+      href={`/${collectionsMode ? "collections" : "subreddits"}/${nextCat}`}
+    >
       <button
         ref={button => button && noInputsActivated && button.focus()}
         className="iconRight"

@@ -70,7 +70,7 @@ class LoginModal extends Component {
           })
         : this.setState({
             errorMessageUserName: error.code.includes("auth/invalid-email")
-              ? "User "
+              ? "Username required"
               : this.state.registerMode
               ? "email/username already registered"
               : "User not found",
@@ -101,7 +101,10 @@ class LoginModal extends Component {
         centered
         visible={this.props.isModalVisible}
         onOk={() => this.submitForm()}
-        onCancel={this.props.toggleIsModalVisible}
+        onCancel={() => {
+          this.props.toggleIsModalVisible(false);
+          this.setState({ registerMode: false });
+        }}
         okText={registerMode ? "Register" : "Log in"}
       >
         <div className="registerInputField">
@@ -122,7 +125,15 @@ class LoginModal extends Component {
             onChange={event => this.setState({ userName: event.target.value })}
             suffix={
               <Tooltip title="Choose user name">
-                <Icon type="info-circle" style={{ color: "rgba(0,0,0,.25)" }} />
+                <Icon
+                  type="info-circle"
+                  style={{
+                    color:
+                      !errorMessageUserName || !errorMessageUserName.length
+                        ? "rgba(0,0,0,.25)"
+                        : "red"
+                  }}
+                />
               </Tooltip>
             }
           />

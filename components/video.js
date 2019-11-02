@@ -79,12 +79,11 @@ class Video extends Component {
     return (
       <Menu>
         <h4 className="addToCollectionModal">
-          <Icon type="bank" /> <span>Add to bank</span>
+          <Icon type="bank" /> <strong>Add to bank</strong>
           <Icon
             style={{
               float: "right",
-              fontSize: 20,
-              padding: "2px 10px 10px 15px"
+              fontSize: 18
             }}
             onClick={() => this.setState({ isDropDownShowing: false })}
             type="close"

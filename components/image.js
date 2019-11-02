@@ -53,24 +53,23 @@ const Image = ({
           message.info(`Added to collection ${list}`);
         }}
       >
-        <Icon type="save" />
+        <Icon style={{ marginRight: 5 }} type="save" />
         {list}
       </Menu.Item>
     ));
     return (
       <Menu>
-        <h4 className="addToCollectionModal">
-          <Icon type="bank" /> <span>Add wdto bank</span>
+        <div className="addToCollectionModal">
+          <Icon type="bank" /> <strong>Add to bank</strong>
           <Icon
             style={{
               float: "right",
-              fontSize: 20,
-              padding: "2px 10px 10px 15px"
+              fontSize: 18
             }}
             onClick={() => setDropDown(false)}
             type="close"
           />
-        </h4>
+        </div>
 
         {!lists.length && (
           <div onClick={() => toggleIsModalVisible()}>

@@ -8,7 +8,7 @@ const ConsentForAge = ({ visible, visibilityChange }) => {
     visible && (
       <div className="webkitTransform" style={styling.wrapper}>
         <div style={styling.innerWrapper}>
-          <div style={{ marginTop: "12vh" }}>
+          <div style={{ padding: "30px" }}>
             <span style={styling.span}>
               This site may include adult content.
             </span>
@@ -20,13 +20,16 @@ const ConsentForAge = ({ visible, visibilityChange }) => {
             <br />
             <br />
             <Button
-              onClick={() => visibilityChange(true)}
+              size="large"
+              onClick={() => visibilityChange(false)}
               style={styling.button}
             >
               No
             </Button>
             <Link href="/subreddits/nsfw">
               <Button
+                size="large"
+                type="primary"
                 onClick={() => setLoading(true)}
                 loading={loading}
                 style={styling.button}
@@ -47,7 +50,7 @@ const styling = {
   },
   wrapper: {
     zIndex: 99999999999999999,
-    background: "rgb(20,20,20, 0.2)",
+    background: "rgb(20,20,20, 0.6)",
     height: "100vh",
     width: "100vw",
     top: 0,
@@ -55,27 +58,26 @@ const styling = {
     position: "fixed"
   },
   innerWrapper: {
+    background: "rgb(20,20,20, 0.2)",
     fontSize: 20,
     zIndex: 99999999999999999,
     borderRadius: 10,
     background: "white",
     opacity: 0.95,
-    height: "50vh",
-    top: "20vh",
-    width: "80vw",
+    height: "320px",
+    top: "25vh",
+    left: "calc(50vw - 160px)",
+    width: "322px",
+    maxWidth: "100vw",
     textAlign: "center",
-    position: "fixed",
-    color: "black",
-    marginLeft: "10vw",
-    marginRight: "10vw"
+    position: "absolute",
+    color: "black"
   },
   button: {
     borderRadius: 5,
     fontSize: 16,
-    color: "white",
-    margin: 5,
-    height: 30,
-    width: 100,
-    backgroundColor: "#40a9ff"
+    cursor: "pointer",
+    margin: 10,
+    width: "40%"
   }
 };

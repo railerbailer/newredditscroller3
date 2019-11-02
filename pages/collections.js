@@ -41,7 +41,6 @@ class UserCollectionCards extends Component {
               );
           })
         );
-        console.log({ collectionsArray });
         this.setState({
           publicCollections: collectionsArray
         });
@@ -170,7 +169,6 @@ class UserCollectionCards extends Component {
           // madeBy = "",
           // accepted = true
         } = collection;
-        console.log(title);
         return (
           <CardComponent
             key={title + i}
@@ -202,6 +200,8 @@ class UserCollectionCards extends Component {
           />
           <GoBackButton goBackFunc={this.goBackinHistory} />
           <MainDropDownMenu
+            toggleIsLoading={this.toggleIsLoading}
+            isLoading={this.props.context.isLoading}
             autoPlayVideo={autoPlayVideo}
             toggleAutoPlayVideo={this.toggleAutoPlayVideo}
             setSources={() => {}}

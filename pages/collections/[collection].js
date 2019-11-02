@@ -80,16 +80,10 @@ class CollectionsScroller extends Component {
     const { publicCollections } = this.state;
     const { userCollections } = this.props.context;
     if (userCollections[collection]) {
-      console.log("in IF");
       this.setSources(Object.values(userCollections[collection]));
     } else {
-      console.log("in else");
-      console.log({ publicCollections });
       publicCollections.forEach(item => {
-        console.log("in foreach");
-        console.log({ collection, title: item.title });
         if (item.title === collection) {
-          console.log(item.data);
           return this.setSources(Object.values(item.data));
         }
       });
@@ -228,6 +222,7 @@ class CollectionsScroller extends Component {
       autoPlayVideo
     } = this.props.context;
     const { firebase } = this.props;
+    const nextCollection = shuffleArray(publicCollections.map(c => c.title));
     return (
       <Swipeable
         className={`wrapper`}
@@ -246,7 +241,7 @@ class CollectionsScroller extends Component {
           <LoginModal
             firebase={firebase}
             toggleIsModalVisible={this.toggleIsModalVisible}
-            isModalVisible={this.state.isModalVisible}
+            isModalVisible={this.props.context.isModalVisible}
           />
           <SearchComponent
             collectionMode={true}
@@ -260,6 +255,8 @@ class CollectionsScroller extends Component {
           />
           <GoBackButton goBackFunc={this.goBackinHistory} />
           <MainDropDownMenu
+            toggleIsLoading={this.toggleIsLoading}
+            isLoading={this.props.context.isLoading}
             autoPlayVideo={autoPlayVideo}
             toggleAutoPlayVideo={this.toggleAutoPlayVideo}
             collectionsMode={true}
@@ -304,7 +301,7 @@ class CollectionsScroller extends Component {
             isModalVisible={isModalVisible}
             switchCat={this.switchCat}
             toggleIsLoading={this.toggleIsLoading}
-            nextCat={"lol"}
+            nextCat={nextCollection}
           />
           <React.Fragment>
             {this.state.sources && this.state.sources.length ? (

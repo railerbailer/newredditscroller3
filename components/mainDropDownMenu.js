@@ -10,6 +10,7 @@ const MainDropDownMenu = ({
   setActiveCollection,
   toggleShowListInput,
   isLoading,
+  toggleIsLoading,
   isOnlyGifsShowing,
   isOnlyPicsShowing,
   showListInput,
@@ -31,7 +32,6 @@ const MainDropDownMenu = ({
     );
     if (nameExists) {
       alert("You already have a collection with that name");
-      return;
     }
     await firebase.updateDataOnUser("collections", {
       [newListName]: Date.now()
@@ -298,7 +298,7 @@ const MainDropDownMenu = ({
         <Menu>
           <Menu.Item disabled={isLoading}>
             <Link href="/subreddits">
-              <div>
+              <div onClick={() => toggleIsLoading(true)}>
                 <Icon type="global" /> Browse all subreddits
               </div>
             </Link>
@@ -314,7 +314,7 @@ const MainDropDownMenu = ({
             }}
           >
             <Link href="/subreddits/nsfw">
-              <div>
+              <div onClick={() => toggleIsLoading(true)}>
                 <Icon type="star" />
                 Browse NSFW
               </div>
@@ -330,7 +330,7 @@ const MainDropDownMenu = ({
             }}
           >
             <Link href="/subreddits/pics">
-              <div>
+              <div onClick={() => toggleIsLoading(true)}>
                 <Icon type="heart" />
                 Browse SFW
               </div>
@@ -344,7 +344,7 @@ const MainDropDownMenu = ({
             }}
           >
             <Link href="/collections">
-              <div>
+              <div onClick={() => toggleIsLoading(true)}>
                 <Icon type="solution" /> Browse user banks
               </div>
             </Link>
@@ -356,23 +356,16 @@ const MainDropDownMenu = ({
             </h4>
           </Menu.Item>
           {user && (
-            <Menu.Item disabled={isLoading}>
+            <Menu.Item
+              onClick={() => !showListInput && toggleShowListInput(true)}
+              disabled={isLoading}
+            >
               <Icon
-                onClick={() =>
-                  newListName.length
-                    ? addNewList()
-                    : toggleShowListInput(!showListInput)
-                }
-                type={
-                  showListInput
-                    ? newListName.length
-                      ? "check-circle"
-                      : "close-circle"
-                    : "plus-circle"
-                }
-                style={{ color: newListName.length ? "green" : "black" }}
-              />
-              {showListInput && (
+                onClick={() => toggleShowListInput(!showListInput)}
+                type={showListInput ? "close-circle" : "plus-circle"}
+                style={{ color: showListInput ? "red" : "black" }}
+              />{" "}
+              {showListInput ? (
                 <React.Fragment>
                   <Input
                     value={newListName}
@@ -391,7 +384,16 @@ const MainDropDownMenu = ({
                     size="small"
                     style={{ maxWidth: "70%" }}
                   />
+                  {newListName && newListName.length && (
+                    <Icon
+                      onClick={() => newListName.length && addNewList()}
+                      type={"check-circle"}
+                      style={{ color: "green", marginLeft: 10, fontSize: 16 }}
+                    />
+                  )}
                 </React.Fragment>
+              ) : (
+                "Add new bank"
               )}
             </Menu.Item>
           )}

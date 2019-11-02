@@ -196,7 +196,8 @@ i {
   opacity: 0.1;
 }
 .addToCollectionModal {
-  margin-left: 4px;
+  text-align: center;
+  padding: 5px 12px;
   display: "flex";
   justify-content: space-between;
 }
@@ -607,7 +608,9 @@ button {
   white-space: wrap;
 }
 .item1 {
-  padding: 1.3125rem 2.625rem;
+  padding: 1.8125rem 2.625rem;
+  width: 315px !important;
+  max-width: 80vw;
   font-size: 2.1875rem;
   white-space: nowrap;
   grid-area: header;
@@ -617,7 +620,9 @@ button {
 
 .item2 {
   grid-area: menu;
-  padding: 1.3125rem 2.625rem;
+  padding: 1.8125rem 2.625rem;
+  width: 315px !important;
+  max-width: 80vw;
   font-size: 2.1875rem;
   white-space: nowrap;
   background-color: #40a9ff;
@@ -760,9 +765,6 @@ button {
   }
 }
 @media (max-width: 800px) {
-  .mediaAddDropdown {
-    min-width: 50vw;
-  }
   .gridMedia {
     border: 0;
     grid-template-columns: repeat(auto-fit, minmax(300px, 2fr));
@@ -796,6 +798,7 @@ button {
   z-index: 19231023901923 !important;
   position: absolute !important;
   margin-top: 50px;
+  max-width: 200px;
 }
 .loginButton {
   font-size: 28px;
