@@ -73,7 +73,7 @@ class CollectionsScroller extends Component {
         this.props.changeContext({ user: null });
       }
     });
-    setTimeout(() => this.getCollection(this.props.params), 2500);
+    setTimeout(() => this.getCollection(this.props.params), 4000);
   }
   getCollection = collection => {
     this.setState({ nextCollection: this.nextCollection() });
