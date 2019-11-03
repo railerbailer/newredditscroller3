@@ -64,19 +64,20 @@ class AddMarkup extends Component {
       this.setActiveElement(activeElement + 1);
   }, 200);
   handleKeyDown = e => {
+    if (this.props.isSearchActivated) return;
     if (e.key === "ArrowDown") {
-      !this.props.isSearchActivated && this.getNextElement();
+      this.getNextElement();
     }
 
     if (e.key === "s") {
-      !this.props.isSearchActivated && this.getNextElement();
+      this.getNextElement();
     }
     if (e.key === "w") {
-      !this.props.isSearchActivated && this.getPreviousElement();
+      this.getPreviousElement();
     }
 
     if (e.key === "ArrowUp") {
-      !this.props.isSearchActivated && this.getPreviousElement();
+      this.getPreviousElement();
     }
     if (e.key === " ") {
       if (this.videoPlayer) {
@@ -85,16 +86,21 @@ class AddMarkup extends Component {
     }
   };
 
-  swipedUp = (e, deltaY, isFlick) => {
-    if (isFlick || deltaY > 75) {
-      this.getNextElement();
+  onSwiped = ({ absX, velocity, dir }) => {
+    if (!this.props.fullscreen || (velocity < 0.5 && absX < 30)) return;
+    switch (dir) {
+      case "Up":
+        this.getNextElement();
+        return;
+      case "Down":
+        this.getPreviousElement();
+        return;
+
+      default:
+        return;
     }
   };
-  swipedDown = (e, deltaY, isFlick) => {
-    if (isFlick || deltaY > 50) {
-      this.getPreviousElement();
-    }
-  };
+
   getIdFromUrl = url => {
     let urlWithoutHttps = url.replace("https://", "").replace("http://", "");
     const indexOfFirstSlash = urlWithoutHttps.indexOf("/");
@@ -285,8 +291,7 @@ class AddMarkup extends Component {
     return (
       <div onKeyDown={e => this.handleKeyDown(e)}>
         <Swipeable
-          onSwipedDown={this.swipedDown}
-          onSwipedUp={this.swipedUp}
+          onSwiped={this.onSwiped}
           style={{ backgroundColor: "rgb(20, 20, 20)" }}
         >
           {html.length &&
@@ -348,13 +353,15 @@ class AddMarkup extends Component {
           {isLoading && (
             <div className="iconSpinner">
               <Spin size="large" />
+              <br />
+              Loading next {collectionsMode ? "collection" : "subreddit"}
             </div>
           )}
 
           {!fullscreen && (
             <div className="loadMoreWrapper">
               {!collectionsMode &&
-                !activeCollection.length &&
+                !activeCollection &&
                 !isLoading &&
                 html.length && (
                   <Button

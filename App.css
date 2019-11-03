@@ -1,9 +1,9 @@
 html {
-  background: rgb(20, 20, 20);
+  background: rgb(20, 20, 20) !important;
   font-display: auto;
 }
 body {
-  background: rgb(20, 20, 20);
+  background: rgb(20, 20, 20) !important;
   font-family: "Varela Round", sans-serif !important;
   font-family: "Roboto", sans-serif;
   margin: 0;
@@ -487,6 +487,9 @@ p {
   width: 100%;
   z-index: 7;
 }
+.categoryModal h3 {
+  color: white;
+}
 
 .description {
   margin: auto;
@@ -546,7 +549,7 @@ p {
   position: fixed;
   width: 100%;
   color: white;
-  font-size: 60px;
+
   z-index: 1239819231923812938;
 }
 
@@ -605,6 +608,7 @@ button {
   padding: 0.5125rem 2.225rem;
   font-size: 1.275rem;
   text-align: center;
+  color: white;
   white-space: wrap;
 }
 .item1 {

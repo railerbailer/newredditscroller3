@@ -12,7 +12,13 @@
     "FB_DATABASE_URL": "@fb_database_url",
     "FB_PROJECT_ID": "@fb_project_id",
     "FB_STORAGE_BUCKET": "@fb_storage_bucket",
-    "FB_MESSAGING_SENDER_ID": "@fb_messaging_sender_id"
+    "FB_MESSAGING_SENDER_ID": "@fb_messaging_sender_id",
+    "PROD_API_KEY": "@prod_api_key",
+    "PROD_AUTH_DOMAIN": "@prod_auth_domain",
+    "PROD_DATABASE_URL": "@prod_database_url",
+    "PROD_PROJECT_ID": "@prod_project_id",
+    "PROD_STORAGE_BUCKET": "@prod_storage_bucket",
+    "PROD_MESSAGING_SENDER_ID": "@prod_messaging_sender_id"
   },
   "build": {
     "env": {
@@ -21,7 +27,13 @@
       "FB_DATABASE_URL": "@fb_database_url",
       "FB_PROJECT_ID": "@fb_project_id",
       "FB_STORAGE_BUCKET": "@fb_storage_bucket",
-      "FB_MESSAGING_SENDER_ID": "@fb_messaging_sender_id"
+      "FB_MESSAGING_SENDER_ID": "@fb_messaging_sender_id",
+      "PROD_API_KEY": "@prod_api_key",
+      "PROD_AUTH_DOMAIN": "@prod_auth_domain",
+      "PROD_DATABASE_URL": "@prod_database_url",
+      "PROD_PROJECT_ID": "@prod_project_id",
+      "PROD_STORAGE_BUCKET": "@prod_storage_bucket",
+      "PROD_MESSAGING_SENDER_ID": "@prod_messaging_sender_id"
     }
   }
 }

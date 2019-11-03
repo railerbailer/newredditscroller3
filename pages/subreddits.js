@@ -1,4 +1,6 @@
 import React from "react";
+import "../App.css";
+import "antd/dist/antd.css";
 
 import {
   gifsArray,
@@ -76,12 +78,9 @@ const SubredditsList = props => {
         <meta name="description" content="List of more than 1000 subreddits" />
         <meta
           name="keywords"
-          content={
-            "hej, två"
-            // Object.values(allCategories)
-            // .flatMap(item => item)
-            // .join(", ")
-          }
+          content={Object.values(allCategories)
+            .flatMap(item => item)
+            .join(", ")}
         />
       </Head>
       <GoBackButton goBackFunc={Router.back} />

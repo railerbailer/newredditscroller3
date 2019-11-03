@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Swipeable } from "react-swipeable";
 import "../../App.css";
+import "antd/dist/antd.css";
 import _ from "lodash";
 import AddMarkup from "../../components/addMarkup";
 import { Icon, message, Spin } from "antd";
@@ -20,7 +21,6 @@ class CollectionsScroller extends Component {
     const { collection } = query;
     const userAgent = req && Parser(req.headers["user-agent"]);
     const isMobile = userAgent && userAgent.device.type === "mobile";
-    console.log("CLG", collection);
     return { params: collection, isMobile };
   }
   state = {
@@ -326,6 +326,8 @@ class CollectionsScroller extends Component {
             ) : (
               <div className="iconSpinner">
                 <Spin size="large" />
+                <br />
+                Loading media...
               </div>
             )}
             <div
@@ -333,7 +335,9 @@ class CollectionsScroller extends Component {
               className="subredditNameDiv"
             >
               <h2 className="subredditName">
-                {activeCollection.length ? activeCollection : collection}{" "}
+                {activeCollection && activeCollection.length
+                  ? activeCollection
+                  : collection}{" "}
                 <Icon type="tag-o" />
               </h2>
             </div>

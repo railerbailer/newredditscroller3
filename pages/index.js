@@ -32,14 +32,17 @@ const Index = ({}) => {
             top: "40vh"
           }}
         >
-          <Spin size="large" />
+          <div>
+            <Spin size="large" />
+            <br />
+            Loading media...
+          </div>
         </div>
       ) : (
         <>
           <h1 className="scrollLogo">sliddit.</h1>
           <ConsentForAge visible={consent} visibilityChange={setConsent} />
           <div className="grid-container">
-            )}
             <h2 className="item0">
               Scroll more than 1.000.000 of pics and gifs!
               <br />

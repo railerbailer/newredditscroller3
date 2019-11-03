@@ -2,7 +2,7 @@ import app from "firebase/app";
 import "firebase/auth";
 import "firebase/database";
 
-const config = {
+const devConfig = {
   apiKey: process.env.FB_API_KEY,
   authDomain: process.env.FB_AUTH_DOMAIN,
   databaseURL: process.env.FB_DATABASE_URL,
@@ -10,9 +10,19 @@ const config = {
   storageBucket: process.env.FB_STORAGE_BUCKET,
   messagingSenderId: process.env.FB_MESSAGING_SENDER_ID
 };
+const prodConfig = {
+  apiKey: process.env.PROD_API_KEY,
+  authDomain: process.env.PROD_AUTH_DOMAIN,
+  databaseURL: process.env.PROD_DATABASE_URL,
+  projectId: process.env.PROD_PROJECT_ID,
+  storageBucket: process.env.PROD_STORAGE_BUCKET,
+  messagingSenderId: process.env.PROD_MESSAGING_SENDER_ID
+};
 class Firebase {
   constructor() {
     if (!app.apps.length) {
+      const config =
+        process.env.NODE_ENV === "production" ? prodConfig : devConfig;
       app.initializeApp(config);
     }
     this.auth = app.auth();

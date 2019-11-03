@@ -158,7 +158,6 @@ class Scroller extends Component {
   };
 
   onSwiped = ({ absX, velocity, dir }) => {
-    console.log(absX, velocity, dir);
     if (velocity < 0.5 && absX < 30) return;
     switch (dir) {
       case "Right":
@@ -322,8 +321,8 @@ class Scroller extends Component {
                 <div className="iconSpinner">
                   <Empty
                     onClick={this.switchCat}
-                    description="Press to load new subreddit!"
-                  />{" "}
+                    description="No media available. Press here to load a new subreddit!"
+                  />
                   <br />
                 </div>
               )}
@@ -333,7 +332,7 @@ class Scroller extends Component {
                 className="subredditNameDiv"
               >
                 <h2 className="subredditName">
-                  {activeCollection.length
+                  {activeCollection && activeCollection.length
                     ? activeCollection
                     : subreddit || this.props.params}{" "}
                   <Icon type="tag-o" />

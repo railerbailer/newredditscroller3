@@ -67,7 +67,14 @@ module.exports = withCSS({
       FB_PROJECT_ID: process.env.FB_PROJECT_ID || "",
       FB_STORAGE_BUCKET: process.env.FB_STORAGE_BUCKET || "",
       FB_MESSAGING_SENDER_ID: process.env.FB_MESSAGING_SENDER_ID || "",
-      FB_APP_ID: process.env.FB_APP_ID || ""
+      FB_APP_ID: process.env.FB_APP_ID || "",
+      PROD_API_KEY: process.env.PROD_API_KEY || "",
+      PROD_AUTH_DOMAIN: process.env.PROD_AUTH_DOMAIN || "",
+      PROD_DATABASE_URL: process.env.PROD_DATABASE_URL || "",
+      PROD_PROJECT_ID: process.env.PROD_PROJECT_ID || "",
+      PROD_STORAGE_BUCKET: process.env.PROD_STORAGE_BUCKET || "",
+      PROD_MESSAGING_SENDER_ID: process.env.PROD_MESSAGING_SENDER_ID || "",
+      PROD_APP_ID: process.env.PROD_APP_ID || ""
     }
   })
   // ,

@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { Swipeable } from "react-swipeable";
 import "../App.css";
+import "antd/dist/antd.css";
 import _ from "lodash";
 import { message } from "antd";
-import "../App.css";
 import { dataHandler, shuffleArray } from "../public/utils/atomic";
 import { carPath } from "../public/utils/carPath";
 import LoginModal from "../components/loginModal";
