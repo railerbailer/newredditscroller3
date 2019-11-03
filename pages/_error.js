@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import Router, { createRouter } from "next/router";
+import Router from "next/router";
 import { Empty } from "antd";
 import ReactGA from "react-ga";
 import Link from "next/link";
@@ -14,7 +14,7 @@ const MyError = ({ url }) => {
   }, []);
 
   const trackError = val => {
-    if (process.env.NODE_ENV === "development")
+    if (process.env.NODE_ENV !== "development")
       ReactGA.event({
         category: "error",
         label: val,
@@ -24,11 +24,20 @@ const MyError = ({ url }) => {
   trackError(url);
 
   return (
-    <Empty
-      style={{ margin: "auto" }}
-      description="Sorry! This page doesn't exist!"
-      onClick={() => createRouter.push("/")}
-    />
+    <div style={{ zIndex: 9812319238123 }}>
+      <h1
+        style={{ zIndex: 8132193819831983192 }}
+        onClick={() => Router.push("/")}
+        className="scrollLogo"
+      >
+        sliddit.
+      </h1>
+      <Empty
+        style={{ margin: "auto" }}
+        description="Sorry! This page doesn't exist!"
+        onClick={() => Router.push("/")}
+      />
+    </div>
   );
 };
 MyError.getInitialProps = ctx => {
