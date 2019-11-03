@@ -49,10 +49,11 @@ class AddMarkup extends Component {
   }, 100);
   getNextElement = throttle(async () => {
     const { activeElement } = this.state;
+    const { isLoadingMore, loadMore, activeCollection } = this.props;
     const haveMoreContent = activeElement + 2 >= html.length;
-    if (!this.props.activeCollection.length && haveMoreContent) {
-      if (!this.props.isLoadingMore) {
-        await this.props.loadMore();
+    if (!activeCollection && haveMoreContent) {
+      if (!isLoadingMore) {
+        await loadMore();
       }
       this.setActiveElement(
         haveMoreContent ? activeElement + 1 : activeElement
@@ -60,29 +61,30 @@ class AddMarkup extends Component {
 
       return;
     }
-    html.length !== activeElement + 1 &&
+    html &&
+      html.length !== activeElement + 1 &&
       this.setActiveElement(activeElement + 1);
   }, 200);
   handleKeyDown = e => {
     if (this.props.isSearchActivated) return;
-    if (e.key === "ArrowDown") {
-      this.getNextElement();
-    }
-
-    if (e.key === "s") {
-      this.getNextElement();
-    }
-    if (e.key === "w") {
-      this.getPreviousElement();
-    }
-
-    if (e.key === "ArrowUp") {
-      this.getPreviousElement();
-    }
-    if (e.key === " ") {
-      if (this.videoPlayer) {
-        this.videoPlayer.play();
-      }
+    switch (e.key) {
+      case "s":
+        this.getNextElement();
+        break;
+      case "ArrowDown":
+        this.getNextElement();
+        break;
+      case "ArrowUp":
+        this.getPreviousElement();
+        break;
+      case "w":
+        this.getPreviousElement();
+        break;
+      case " ":
+        this.videoPlayer && this.videoPlayer.play();
+        break;
+      default:
+        break;
     }
   };
 
@@ -294,7 +296,8 @@ class AddMarkup extends Component {
           onSwiped={this.onSwiped}
           style={{ backgroundColor: "rgb(20, 20, 20)" }}
         >
-          {html.length &&
+          {html &&
+            html.length &&
             (fullscreen ? (
               <div
                 style={{
@@ -363,6 +366,7 @@ class AddMarkup extends Component {
               {!collectionsMode &&
                 !activeCollection &&
                 !isLoading &&
+                html &&
                 html.length && (
                   <Button
                     onClick={() => {

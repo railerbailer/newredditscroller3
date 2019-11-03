@@ -1,6 +1,7 @@
 import React from "react";
 import "../App.css";
 import "antd/dist/antd.css";
+import { flatMap } from "lodash";
 
 import {
   gifsArray,
@@ -78,9 +79,9 @@ const SubredditsList = props => {
         <meta name="description" content="List of more than 1000 subreddits" />
         <meta
           name="keywords"
-          content={Object.values(allCategories)
-            .flatMap(item => item)
-            .join(", ")}
+          content={flatMap(Object.values(allCategories), item => item).join(
+            ", "
+          )}
         />
       </Head>
       <GoBackButton goBackFunc={Router.back} />

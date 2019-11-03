@@ -5,8 +5,8 @@ export const initGA = () => {
 };
 
 export const logPageView = () => {
-  if (process.env.NODE_ENV === "development") {
-    console.log("page view triggered");
+  if (!process.env.NODE_ENV === "production") {
+    console.log("pageview triggered");
     return;
   }
   console.log("pageview registered");

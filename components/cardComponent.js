@@ -2,8 +2,7 @@ import React from "react";
 import { Card } from "antd";
 import Link from "next/link";
 
-const CardComponent = props => {
-  const { title, madeBy, description, data } = props;
+const CardComponent = ({ title, madeBy, description, data, numberOfMedia }) => {
   const { Meta } = Card;
   const mediaSource = () => {
     if (data && Object.entries(data).length !== 0) {
@@ -50,7 +49,7 @@ const CardComponent = props => {
         cover={source()}
       >
         <Meta
-          title={title.split(" ")[0] + getRandomInt(1000)}
+          title={`${title.split(" ")[0]} (${numberOfMedia} items)`}
           description={`${description} Made by: ${madeBy}`}
         />
       </Card>

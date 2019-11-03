@@ -26,7 +26,8 @@ class CollectionsScroller extends Component {
   state = {
     collection: "",
     publicCollections: [],
-    sources: []
+    sources: [],
+    nextCollection: ""
   };
   componentDidUpdate(prevProps, prevState) {
     if (
@@ -75,6 +76,7 @@ class CollectionsScroller extends Component {
     setTimeout(() => this.getCollection(this.props.params), 4000);
   }
   getCollection = collection => {
+    this.setState({ nextCollection: this.nextCollection() });
     this.toggleIsLoading(true);
     this.setActiveCollection(collection);
     const { publicCollections } = this.state;
@@ -102,7 +104,7 @@ class CollectionsScroller extends Component {
   toggleFullscreen = () =>
     !this.props.context.isSearchActivated &&
     this.props.changeContext({
-      fullscreenActive: !this.props.context.fullscreenActive
+      fullscreen: !this.props.context.fullscreen
     });
   toggleIsModalVisible = () =>
     this.props.changeContext({
@@ -147,21 +149,30 @@ class CollectionsScroller extends Component {
     Router.push(route);
   };
 
-  switchCat = _.throttle(async () => {
+  switchCat = _.throttle(() => {
     window.stop();
     this.toggleDropDown(false);
-    const collectionsArray = this.state.publicCollections.map(
-      item => item.title
-    );
-    await this.pushToHistory(`collections/${shuffleArray(collectionsArray)}`);
+    const nextCollectionParam = this.nextCollection();
+    nextCollectionParam &&
+      this.pushToHistory(`/collections/${this.nextCollection()}`);
   }, 250);
+
+  nextCollection = () => {
+    const collectionsWithContent = this.state.publicCollections.filter(
+      c => Object.values(c.data).length > 0
+    );
+    const collectionsTitles = collectionsWithContent.map(c => c.title);
+    const shuffledCollection = shuffleArray(collectionsTitles);
+    return shuffledCollection;
+  };
+
   goBackinHistory = _.throttle(() => Router.back(), 250);
   handleKeyDown = e => {
     if (e.key === "ArrowLeft") {
       this.goBackinHistory();
     }
     if (e.key === "Escape") {
-      this.props.changeContext({ fullscreenActive: false });
+      this.props.changeContext({ fullscreen: false });
     }
     if (e.key === "a") {
       this.goBackinHistory();
@@ -175,15 +186,18 @@ class CollectionsScroller extends Component {
     }
   };
 
-  swipedLeft = (e, absX, isFlick) => {
-    if (isFlick || absX > 30) {
-      this.switchCat();
-    }
-  };
+  onSwiped = ({ absX, velocity, dir }) => {
+    if (velocity < 0.5 && absX < 30) return;
+    switch (dir) {
+      case "Right":
+        this.goBackinHistory();
+        return;
+      case "Left":
+        this.switchCat();
+        return;
 
-  swipedRight = (e, absX, isFlick) => {
-    if (isFlick || absX > 30) {
-      this.goBackinHistory();
+      default:
+        return;
     }
   };
 
@@ -222,10 +236,8 @@ class CollectionsScroller extends Component {
       autoPlayVideo
     } = this.props.context;
     const { firebase } = this.props;
-    const nextCollection = shuffleArray(publicCollections.map(c => c.title));
     return (
-      <Swipeable
-        className={`wrapper`}
+      <div
         onKeyDown={
           !isModalVisible &&
           !isModalVisible &&
@@ -234,116 +246,116 @@ class CollectionsScroller extends Component {
             ? this.handleKeyDown
             : undefined
         }
-        onSwipedLeft={this.swipedLeft}
-        onSwipedRight={this.swipedRight}
       >
-        <div className="topbarZen">
-          <LoginModal
-            firebase={firebase}
-            toggleIsModalVisible={this.toggleIsModalVisible}
-            isModalVisible={this.props.context.isModalVisible}
-          />
-          <SearchComponent
-            collectionMode={true}
-            publicCollections={publicCollections.map(item => item.title)}
-            setAutoCompleteDataSource={this.setAutoCompleteDataSource}
-            getSubreddit={this.getCollection}
-            dataHandler={dataHandler}
-            isSearchActivated={isSearchActivated}
-            autoCompleteDataSource={autoCompleteDataSource}
-            toggleSearchButton={this.toggleSearchButton}
-          />
-          <GoBackButton goBackFunc={this.goBackinHistory} />
-          <MainDropDownMenu
-            toggleIsLoading={this.toggleIsLoading}
-            isLoading={this.props.context.isLoading}
-            autoPlayVideo={autoPlayVideo}
-            toggleAutoPlayVideo={this.toggleAutoPlayVideo}
-            collectionsMode={true}
-            isDropDownShowing={isDropDownShowing}
-            setSources={this.setSources}
-            isOnlyGifsShowing={isOnlyGifsShowing}
-            isOnlyPicsShowing={isOnlyPicsShowing}
-            category={category}
-            showListInput={showListInput}
-            userCollections={userCollections}
-            activeCollection={activeCollection}
-            user={user}
-            toggleDropDown={this.toggleDropDown}
-            toggleIsModalVisible={this.toggleIsModalVisible}
-            setActiveCollection={this.setActiveCollection}
-            toggleGifsOnly={this.toggleGifsOnly}
-            togglePicsOnly={this.togglePicsOnly}
-            changeCat={this.changeCat}
-            toggleShowListInput={this.toggleShowListInput}
-            firebase={firebase}
-          />
-        </div>
-        <div className={`contentZen ${fullscreen && "fullscreen"}`}>
-          {reload > 6 && (
-            <div
-              onClick={() =>
-                this.getCollection(shuffleArray(userCollections.collection))
-              }
-              className="internetProblemReload"
-            >
-              <Icon
-                style={{ color: "white", fontSize: 30 }}
-                type="disconnect"
-              />
-              <p>Press to reload</p>
-            </div>
-          )}
-          <SwitchCategoryButtons
-            collectionsMode={true}
-            isSearchActivated={isSearchActivated}
-            showListInput={showListInput}
-            isModalVisible={isModalVisible}
-            switchCat={this.switchCat}
-            toggleIsLoading={this.toggleIsLoading}
-            nextCat={nextCollection}
-          />
-          <React.Fragment>
-            {this.state.sources && this.state.sources.length ? (
-              <AddMarkup
-                collectionsMode={true}
-                toggleIsModalVisible={this.toggleIsModalVisible}
-                activeCollection={this.state.activeCollection}
-                collections={userCollections}
-                addMediaToCollection={this.addMediaToCollection}
-                isSearchActivated={isSearchActivated}
-                toggleFullscreen={this.toggleFullscreen}
-                toggleIsLoading={this.toggleIsLoading}
-                mobile={mobile}
-                isOnlyGifsShowing={isOnlyGifsShowing}
-                isOnlyPicsShowing={isOnlyPicsShowing}
-                fullscreen={fullscreen}
-                dataSource={this.state.sources}
-                loadMore={this.moreSubreddits}
-                isLoading={isLoading}
-                isLoadingMore={isLoadingMore}
-              />
-            ) : (
-              <div className="iconSpinner">
-                <Spin size="large" />
-                <br />
-                Loading media...
+        <Swipeable className={`wrapper`} onSwiped={this.onSwiped}>
+          <div className="topbarZen">
+            <LoginModal
+              firebase={firebase}
+              toggleIsModalVisible={this.toggleIsModalVisible}
+              isModalVisible={isModalVisible}
+            />
+            <SearchComponent
+              collectionMode={true}
+              publicCollections={publicCollections.map(item => item.title)}
+              setAutoCompleteDataSource={this.setAutoCompleteDataSource}
+              getSubreddit={this.getCollection}
+              dataHandler={dataHandler}
+              isSearchActivated={isSearchActivated}
+              autoCompleteDataSource={autoCompleteDataSource}
+              toggleSearchButton={this.toggleSearchButton}
+            />
+            <GoBackButton goBackFunc={this.goBackinHistory} />
+            <MainDropDownMenu
+              toggleIsLoading={this.toggleIsLoading}
+              isLoading={this.props.context.isLoading}
+              autoPlayVideo={autoPlayVideo}
+              toggleAutoPlayVideo={this.toggleAutoPlayVideo}
+              collectionsMode={true}
+              isDropDownShowing={isDropDownShowing}
+              setSources={this.setSources}
+              isOnlyGifsShowing={isOnlyGifsShowing}
+              isOnlyPicsShowing={isOnlyPicsShowing}
+              category={category}
+              showListInput={showListInput}
+              userCollections={userCollections}
+              activeCollection={activeCollection}
+              user={user}
+              toggleDropDown={this.toggleDropDown}
+              toggleIsModalVisible={this.toggleIsModalVisible}
+              setActiveCollection={this.setActiveCollection}
+              toggleGifsOnly={this.toggleGifsOnly}
+              togglePicsOnly={this.togglePicsOnly}
+              changeCat={this.changeCat}
+              toggleShowListInput={this.toggleShowListInput}
+              firebase={firebase}
+            />
+          </div>
+          <div className={`contentZen ${fullscreen && "fullscreen"}`}>
+            {reload > 6 && (
+              <div
+                onClick={() =>
+                  this.getCollection(shuffleArray(userCollections.collection))
+                }
+                className="internetProblemReload"
+              >
+                <Icon
+                  style={{ color: "white", fontSize: 30 }}
+                  type="disconnect"
+                />
+                <p>Press to reload</p>
               </div>
             )}
-            <div
-              style={{ opacity: isSearchActivated ? 0.1 : 1 }}
-              className="subredditNameDiv"
-            >
-              <h2 className="subredditName">
-                {activeCollection && activeCollection.length
-                  ? activeCollection
-                  : collection}{" "}
-                <Icon type="tag-o" />
-              </h2>
-            </div>
-          </React.Fragment>
-        </div>
-      </Swipeable>
+            <SwitchCategoryButtons
+              collectionsMode={true}
+              isSearchActivated={isSearchActivated}
+              showListInput={showListInput}
+              isModalVisible={isModalVisible}
+              switchCat={this.switchCat}
+              toggleIsLoading={this.toggleIsLoading}
+              nextColl={this.state.nextCollection}
+            />
+            <React.Fragment>
+              {this.state.sources && this.state.sources.length ? (
+                <AddMarkup
+                  collectionsMode={true}
+                  toggleIsModalVisible={this.toggleIsModalVisible}
+                  activeCollection={activeCollection}
+                  collections={userCollections}
+                  addMediaToCollection={this.addMediaToCollection}
+                  isSearchActivated={isSearchActivated}
+                  toggleFullscreen={this.toggleFullscreen}
+                  toggleIsLoading={this.toggleIsLoading}
+                  mobile={mobile}
+                  isOnlyGifsShowing={isOnlyGifsShowing}
+                  isOnlyPicsShowing={isOnlyPicsShowing}
+                  fullscreen={fullscreen}
+                  dataSource={this.state.sources}
+                  loadMore={this.moreSubreddits}
+                  isLoading={isLoading}
+                  isLoadingMore={isLoadingMore}
+                />
+              ) : (
+                <div className="iconSpinner">
+                  <Spin size="large" />
+                  <br />
+                  Loading media...
+                </div>
+              )}
+              <div
+                style={{ opacity: isSearchActivated ? 0.1 : 1 }}
+                className="subredditNameDiv"
+              >
+                <h2 className="subredditName">
+                  {activeCollection && activeCollection.length
+                    ? activeCollection
+                    : collection}{" "}
+                  <Icon type="tag-o" />
+                </h2>
+              </div>
+            </React.Fragment>
+          </div>
+        </Swipeable>
+      </div>
     );
   }
 }

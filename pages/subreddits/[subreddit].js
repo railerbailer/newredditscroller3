@@ -295,7 +295,7 @@ class Scroller extends Component {
               showListInput={showListInput}
               isModalVisible={isModalVisible}
               toggleIsLoading={this.toggleIsLoading}
-              nextCat={shuffleArray(dataHandler(this.props.context.category))}
+              nextColl={shuffleArray(dataHandler(this.props.context.category))}
             />
             <React.Fragment>
               {sources && sources.length ? (

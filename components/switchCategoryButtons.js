@@ -6,7 +6,7 @@ const SwitchCategoryButtons = props => {
     collectionsMode,
     showListInput,
     isModalVisible,
-    nextCat,
+    nextColl,
     toggleIsLoading
   } = props;
   const noInputsActivated =
@@ -17,7 +17,10 @@ const SwitchCategoryButtons = props => {
   };
   return (
     <Link
-      href={`/${collectionsMode ? "collections" : "subreddits"}/${nextCat}`}
+      href={
+        nextColl &&
+        `/${collectionsMode ? "collections" : "subreddits"}/${nextColl}`
+      }
     >
       <button
         ref={button => button && noInputsActivated && button.focus()}

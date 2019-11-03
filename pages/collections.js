@@ -35,7 +35,7 @@ class UserCollectionCards extends Component {
               Object.entries(userCollectionsDeep).forEach(
                 ([name, userCollection]) =>
                   collectionsArray.push({
-                    title: name + id,
+                    title: name + " " + id,
                     data: userCollection
                   })
               );
@@ -163,18 +163,21 @@ class UserCollectionCards extends Component {
       publicCollections &&
       publicCollections.map((collection, i) => {
         const {
-          data = null,
+          data = {},
           title = "User collection" + this.getRandomInt(1000),
           description = ""
-          // madeBy = "",
-          // accepted = true
+          // madeBy,
+          // accepted
         } = collection;
+        const numberOfMedia = Object.values(data).length;
+        if (numberOfMedia < 1) return null;
         return (
           <CardComponent
             key={title + i}
+            numberOfMedia={numberOfMedia}
             title={title}
             description={description}
-            madeBy={"Anonymous"}
+            madeBy={"anon"}
             data={data}
             pushToHistory={this.pushToHistory}
           />
