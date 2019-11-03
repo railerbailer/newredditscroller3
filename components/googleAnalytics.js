@@ -5,7 +5,7 @@ export const initGA = () => {
 };
 
 export const logPageView = () => {
-  if (!process.env.NODE_ENV === "production") {
+  if (process.env.NODE_ENV !== "production") {
     console.log("pageview triggered");
     return;
   }

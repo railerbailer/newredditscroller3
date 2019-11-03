@@ -124,15 +124,10 @@ class Scroller extends Component {
   };
 
   switchCat = _.throttle(() => {
-    const { category, mode, isLoading } = this.props.context;
     this.toggleIsLoading(true);
-    // window.stop();
-    this.toggleDropDown(false);
-    this.setActiveCollection("");
-    this.setSources([]);
-
-    !isLoading &&
-      Router.push(`/${mode || "subreddits"}/${randomSubreddit(category)}`);
+    const { category } = this.props.context;
+    window.stop();
+    Router.push(`/subreddits/${randomSubreddit(category)}`);
   }, 250);
 
   goBackinHistory =
@@ -153,6 +148,7 @@ class Scroller extends Component {
       this.switchCat();
     }
     if (e.key === "d") {
+      console.log("D");
       this.switchCat();
     }
   };
@@ -210,9 +206,16 @@ class Scroller extends Component {
       autoPlayVideo
     } = this.props.context;
     const { firebase, preloadedData } = this.props;
-    const mediaTitlesArr = [preloadedData || []].map(items => items.title);
+    const mediaTitlesArr = preloadedData
+      ? preloadedData.map(items => items.title)
+      : [];
     const mediaTitles = mediaTitlesArr.join(", ");
-    sources = preloadedData;
+    if (
+      sources !== undefined &&
+      preloadedData !== undefined &&
+      sources.length < preloadedData.length
+    )
+      sources = preloadedData;
     return (
       <div
         onKeyDown={
@@ -223,10 +226,10 @@ class Scroller extends Component {
       >
         <Swipeable className={`wrapper`} onSwiped={this.onSwiped}>
           <Head>
-            <title>{this.props.context.subreddit}</title>
+            <title>{this.props.params}</title>
             <meta
               name="description"
-              content={`Showing images and gifs from subreddit ${this.props.params}`}
+              content={`Images and gifs from r/${this.props.params}`}
             />
             <meta name="keywords" content={mediaTitles} />
           </Head>
@@ -321,7 +324,7 @@ class Scroller extends Component {
                 <div className="iconSpinner">
                   <Empty
                     onClick={this.switchCat}
-                    description="No media available. Press here to load a new subreddit!"
+                    description="Sorry! Subreddit not available. Press to load a new subreddit!"
                   />
                   <br />
                 </div>
@@ -339,7 +342,6 @@ class Scroller extends Component {
                 </h2>
               </div>
             </React.Fragment>
-            )}
           </div>
         </Swipeable>
       </div>

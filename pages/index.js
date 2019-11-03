@@ -12,13 +12,14 @@ const Index = ({}) => {
   return (
     <div className="categoryModal">
       <Head>
+        <title>sliddit - images and pics from all subreddits</title>
         <meta
           name="description"
-          content="Your site for scrolling pictures and gifs from subreddits."
+          content="Scroll images and pics from all subreddits r/"
         />
         <meta
           name="keywords"
-          content="NSFW, NSFW pics,nsfw gifs, nsfw pictures, not safe for work, SFW"
+          content="subreddit, subreddits, subreddit nsfw, nsfw, sfw, nsfw pics, nsfw gifs, not safe for work"
         />
       </Head>
       {loading ? (

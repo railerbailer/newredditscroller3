@@ -296,8 +296,7 @@ class AddMarkup extends Component {
           onSwiped={this.onSwiped}
           style={{ backgroundColor: "rgb(20, 20, 20)" }}
         >
-          {html &&
-            html.length &&
+          {html.length &&
             (fullscreen ? (
               <div
                 style={{

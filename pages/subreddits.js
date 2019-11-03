@@ -76,7 +76,10 @@ const SubredditsList = props => {
     <>
       <Head>
         <title>List of subreddits</title>
-        <meta name="description" content="List of more than 1000 subreddits" />
+        <meta
+          name="description"
+          content="List of more than 1.000.000 subreddits"
+        />
         <meta
           name="keywords"
           content={flatMap(Object.values(allCategories), item => item).join(

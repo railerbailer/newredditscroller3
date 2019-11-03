@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { Icon, Dropdown, Menu, message } from "antd";
-import GoogleAnalytics from "react-ga";
+import ReactGA from "react-ga";
 
 const trackImage = url => {
   console.log("tracking", url);
   if (process.env.NODE_ENV !== "development")
-    GoogleAnalytics.event({
+    ReactGA.event({
       category: "affiliateImage",
       action: `Clicked ${url}`
     });
@@ -100,7 +100,6 @@ const Image = ({
         </a>
       )}
       <img
-        {...{ name: "hej" }}
         onBlur={() => setDropDown(false)}
         onLoad={() => setLoadedData(loadedData + 2)}
         onError={() => console.log("Image error")}
@@ -108,7 +107,7 @@ const Image = ({
           setDropDown(false);
           toggleFullscreen(index);
         }}
-        alt="Could not be loaded"
+        alt={title}
         className={className}
         // ref={img => (this.img = img)}
         src={src}

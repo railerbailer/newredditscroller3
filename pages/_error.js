@@ -1,6 +1,8 @@
 import React, { useEffect } from "react";
-import Router from "next/router";
+import Router, { createRouter } from "next/router";
 import { Empty } from "antd";
+import ReactGA from "react-ga";
+import Link from "next/link";
 
 const MyError = ({ url }) => {
   useEffect(() => {
@@ -11,7 +13,23 @@ const MyError = ({ url }) => {
     }
   }, []);
 
-  return <Empty style={{ margin: "auto" }} description=" " />;
+  const trackError = val => {
+    if (process.env.NODE_ENV === "development")
+      ReactGA.event({
+        category: "error",
+        label: val,
+        action: `Clicked ${val}`
+      });
+  };
+  trackError(url);
+
+  return (
+    <Empty
+      style={{ margin: "auto" }}
+      description="Sorry! This page doesn't exist!"
+      onClick={() => createRouter.push("/")}
+    />
+  );
 };
 MyError.getInitialProps = ctx => {
   return {

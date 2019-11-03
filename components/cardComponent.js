@@ -25,7 +25,7 @@ const CardComponent = ({ title, madeBy, description, data, numberOfMedia }) => {
     const sourceData = mediaSource();
     if (sourceData) {
       if (sourceData[0] === "gif" || sourceData[0] === "image") {
-        return <img alt="example" src={sourceData[1]} />;
+        return <img alt="piczz" src={sourceData[1]} />;
       } else if (sourceData[0] === "video") {
         return (
           <video>
