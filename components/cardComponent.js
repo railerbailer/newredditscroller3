@@ -42,7 +42,7 @@ const CardComponent = ({ title, madeBy, description, data, numberOfMedia }) => {
   };
 
   return (
-    <Link href={`/collections/${title}`}>
+    <Link href={`/collections/${title.replace(" ", "")}`}>
       <Card
         // className={`card ${mediaSource()[0]}`}
         hoverable

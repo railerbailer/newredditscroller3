@@ -1,6 +1,5 @@
 {
-  "alias": "newredditscroller3",
-  "name": "newredditscroller3",
+  "name": "sliddit",
   "builds": [{ "src": "package.json", "use": "@now/next" }],
   "github": {
     "enabled": false

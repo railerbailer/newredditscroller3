@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import Router from "next/router";
 import { Empty } from "antd";
 import ReactGA from "react-ga";
-import Link from "next/link";
 
 const MyError = ({ url }) => {
   useEffect(() => {
