@@ -5,7 +5,7 @@ import "antd/dist/antd.css";
 import "../../App.css";
 import _ from "lodash";
 import AddMarkup from "../../components/addMarkup";
-import { Icon, message, Empty } from "antd";
+import { Icon, message, Empty, Button } from "antd";
 import {
   dataHandler,
   shuffleArray,
@@ -321,13 +321,23 @@ class Scroller extends Component {
                   isLoadingMore={isLoadingMore}
                 />
               ) : (
-                <div className="iconSpinner">
-                  <Empty
-                    onClick={this.switchCat}
-                    description="Sorry! Subreddit not available. Press to load a new subreddit!"
-                  />
-                  <br />
-                </div>
+                <Empty
+                  style={{ marginTop: "35vh" }}
+                  image="https://gw.alipayobjects.com/mdn/miniapp_social/afts/img/A*pevERLJC9v0AAAAAAAAAAABjAQAAAQ/original"
+                  imageStyle={{
+                    height: 60
+                  }}
+                  description={
+                    <span>
+                      "Sorry! Subreddit not available. Press to load a new
+                      subreddit!"
+                    </span>
+                  }
+                >
+                  <Button onClick={this.switchCat} type="primary">
+                    Load another subreddit
+                  </Button>
+                </Empty>
               )}
 
               <div

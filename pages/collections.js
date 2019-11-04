@@ -3,9 +3,8 @@ import { Swipeable } from "react-swipeable";
 import "../App.css";
 import "antd/dist/antd.css";
 import _ from "lodash";
-import { message } from "antd";
+import { message, Spin } from "antd";
 import { dataHandler, shuffleArray } from "../public/utils/atomic";
-import { carPath } from "../public/utils/carPath";
 import LoginModal from "../components/loginModal";
 import SearchComponent from "../components/search";
 import MainDropDownMenu from "../components/mainDropDownMenu";
@@ -234,18 +233,7 @@ class UserCollectionCards extends Component {
         >
           {!data.length ? (
             <div className="spinner">
-              <div className="centered-text">
-                <div className="centered-text">
-                  Loading <strong>public user banks</strong>
-                </div>
-              </div>
-              <div className="carSpinner">
-                <svg xmlns="http://www.w3.org/2000/svg">
-                  <path fill="#FFF" d={carPath} />
-                </svg>
-              </div>
-              <br />
-              <br />
+              <Spin size="large" />
             </div>
           ) : (
             <div className="cardGrid">{data}</div>
