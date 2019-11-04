@@ -12,14 +12,14 @@ const Index = ({}) => {
   return (
     <div className="categoryModal">
       <Head>
-        <title>sliddit - images and pics from all subreddits</title>
+        <title>Sliddit - A gallery from the most popular subreddits.</title>
         <meta
           name="description"
-          content="Scroll images and pics from all subreddits r/"
+          content="Create your own gallery from your favorite subreddits. Sliddit is a gallery from the most popular subreddits."
         />
         <meta
           name="keywords"
-          content="subreddit, subreddits, subreddit nsfw, nsfw, sfw, nsfw pics, nsfw gifs, not safe for work"
+          content="reddit gallery, subreddit gallery, nsfw reddit, reddit nsfw, nsfw subreddits, r/, most popular nsfw subreddits"
         />
       </Head>
       {loading ? (
@@ -59,7 +59,7 @@ const Index = ({}) => {
             >
               NSFW (18+)
             </button>
-            <Link href="/subreddits/pics">
+            <Link href="/r/pics">
               <button onClick={() => setLoading(true)} className="item2">
                 Safe for work
               </button>

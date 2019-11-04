@@ -13,6 +13,7 @@ import MainDropDownMenu from "../../components/mainDropDownMenu";
 import GoBackButton from "../../components/goBackButton";
 import Router from "next/router";
 import Parser from "ua-parser-js";
+import Head from "next/head";
 
 let sources = [];
 let reload = 0;
@@ -247,6 +248,14 @@ class CollectionsScroller extends Component {
             : undefined
         }
       >
+        <Head>
+          <title>{`${collection ||
+            activeCollection} from subreddit pics`}</title>
+          <meta
+            name="description"
+            content="Collections of images from subreddits. Sliddit is a gallery from the most popular subreddits."
+          />
+        </Head>
         <Swipeable className={`wrapper`} onSwiped={this.onSwiped}>
           <div className="topbarZen">
             <LoginModal

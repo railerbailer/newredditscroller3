@@ -11,6 +11,7 @@ import MainDropDownMenu from "../components/mainDropDownMenu";
 import CardComponent from "../components/cardComponent";
 import GoBackButton from "../components/goBackButton";
 import Router from "next/router";
+import Head from "next/head";
 
 class UserCollectionCards extends Component {
   state = {
@@ -184,6 +185,13 @@ class UserCollectionCards extends Component {
       });
     return (
       <Swipeable className={`wrapper`}>
+        <Head>
+          <title>{`User collections of media`}</title>
+          <meta
+            name="description"
+            content="Image and gif collections created by users"
+          />
+        </Head>
         <div className="topbarZen">
           <LoginModal
             firebase={firebase}

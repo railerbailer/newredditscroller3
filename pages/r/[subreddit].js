@@ -127,7 +127,7 @@ class Scroller extends Component {
     this.toggleIsLoading(true);
     const { category } = this.props.context;
     window.stop();
-    Router.push(`/subreddits/${randomSubreddit(category)}`);
+    Router.push(`/r/${randomSubreddit(category)}`);
   }, 250);
 
   goBackinHistory =
@@ -226,10 +226,10 @@ class Scroller extends Component {
       >
         <Swipeable className={`wrapper`} onSwiped={this.onSwiped}>
           <Head>
-            <title>{this.props.params}</title>
+            <title>r/{this.props.params}</title>
             <meta
               name="description"
-              content={`Images and gifs from r/${this.props.params}`}
+              content={`Browse 100+ images and gifs from r/${this.props.params} subreddit. Sliddit is a gallery from the most popular subreddits.`}
             />
             <meta name="keywords" content={mediaTitles} />
           </Head>
@@ -373,7 +373,7 @@ class Scroller extends Component {
         afterData = jsonData.data.after;
         sources = dataMapper(jsonData.data.children, this.props.context.mobile);
         // if (sources.length) {
-        //   this.pushToHistory(`/subreddits/${this.props.context.subreddit}`);
+        //   this.pushToHistory(`/r/${this.props.context.subreddit}`);
         // }
         // const haveVideoOrGif = sources.length && sources.some(media => media.gif || media.video);
       })

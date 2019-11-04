@@ -313,7 +313,7 @@ const MainDropDownMenu = ({
               changeCat && changeCat("", "nsfw");
             }}
           >
-            <Link href="/subreddits/nsfw">
+            <Link href="/r/nsfw">
               <div onClick={() => toggleIsLoading(true)}>
                 <Icon type="star" />
                 Browse NSFW
@@ -329,7 +329,7 @@ const MainDropDownMenu = ({
               changeCat && changeCat("", "sfw");
             }}
           >
-            <Link href="/subreddits/pics">
+            <Link href="/r/pics">
               <div onClick={() => toggleIsLoading(true)}>
                 <Icon type="heart" />
                 Browse SFW

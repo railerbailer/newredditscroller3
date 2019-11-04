@@ -5,7 +5,7 @@ import Link from "next/link";
 const SubredditLink = ({ subreddit }) => {
   const [loading, setLoading] = useState(false);
   return (
-    <Link href={`/subreddits/${subreddit}`}>
+    <Link href={`/r/${subreddit}`}>
       <a style={{ padding: 7, margin: 5 }} onClick={() => setLoading(true)}>
         {subreddit}
         {loading && <Icon type="loading" />}

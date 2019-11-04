@@ -26,7 +26,7 @@ const ConsentForAge = ({ visible, visibilityChange }) => {
             >
               No
             </Button>
-            <Link href="/subreddits/nsfw">
+            <Link href="/r/nsfw">
               <Button
                 size="large"
                 type="primary"
