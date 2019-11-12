@@ -35,11 +35,14 @@ class Scroller extends Component {
       .then(response => response.json())
       .then(async jsonData => {
         afterData = jsonData.data.after;
-        return jsonData.data && dataMapper(jsonData.data.children, isMobile);
+        const isNsfw = dataHandler("nsfw").includes(subreddit);
+        return (
+          jsonData.data && dataMapper(jsonData.data.children, isMobile, isNsfw)
+        );
       })
       .catch(error => console.log("ERROR", error));
 
-    return { params: subreddit, preloadedData };
+    return { params: subreddit, preloadedData, afterData };
   }
 
   componentDidMount() {
@@ -402,15 +405,17 @@ class Scroller extends Component {
 
   moreSubreddits = async () => {
     this.props.changeContext({ isLoadingMore: true });
-    await fetch(
-      `https://www.reddit.com/r/${this.props.params}.json?after=${afterData}&limit=100`
-    )
+    const apiUrl = `https://www.reddit.com/r/${this.props.params}.json?after=${afterData}&limit=100`;
+    console.log(`Fetching: ${apiUrl}`);
+    const isNsfw = dataHandler("nsfw").includes(this.props.params);
+    await fetch(apiUrl)
       .then(response => response.json())
       .then(jsonData => {
         afterData = jsonData.data.after;
         let convertedAfterData = dataMapper(
           jsonData.data.children,
-          this.props.context.mobile
+          this.props.context.mobile,
+          isNsfw
         );
         // const haveVideoOrGif = afterData.length && afterData.some(media => media.gif || media.video);
         if (!convertedAfterData.length) {

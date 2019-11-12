@@ -154,6 +154,7 @@ class AddMarkup extends Component {
           superTall: 645,
           veryTall: 645,
           rectangular: 385,
+          wide: 250,
           superWide: 255,
           veryWide: 255
         };
