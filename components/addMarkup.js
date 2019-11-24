@@ -357,7 +357,12 @@ class AddMarkup extends Component {
             <div className="iconSpinner">
               <Spin size="large" />
               <br />
-              Loading next {collectionsMode ? "collection" : "subreddit"}
+              Loading{" "}
+              {this.props.nextSubreddit
+                ? this.props.nextSubreddit
+                : "next" + collectionsMode
+                ? "collection"
+                : "subreddit"}
             </div>
           )}
 

@@ -144,7 +144,7 @@ export const dataMapper = (fetchedData, mobile, isNsfw = true) => {
             high: high,
             className: imageRatioCalculator(resolution.height, resolution.width)
           };
-          if (mobile && (!high && !low)) {
+          if (mobile && !high && !low) {
             mediaData.image = null;
           }
           if (
@@ -166,13 +166,13 @@ export const dataMapper = (fetchedData, mobile, isNsfw = true) => {
       (mediaData.image || mediaData.video || mediaData.gif)
     ) {
       convertedSources.push(mediaData);
-      if (
-        isNsfw &&
-        (convertedSources.length % 10 === 0 || convertedSources.length === 4)
-      ) {
-        const affiliatedAd = createBannerImage();
-        convertedSources.push(affiliatedAd);
-      }
+      // if (
+      //   isNsfw &&
+      //   (convertedSources.length % 10 === 0 || convertedSources.length === 4)
+      // ) {
+      //   const affiliatedAd = createBannerImage();
+      //   convertedSources.push(affiliatedAd);
+      // }
     }
     return null;
   });

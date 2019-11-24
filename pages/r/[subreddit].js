@@ -24,28 +24,54 @@ let sources = [];
 let reload = 0;
 let afterData;
 const randomSubreddit = c => shuffleArray(dataHandler(c));
+
+const initialFetchSubreddit = async (req, params, retries = 0) => {
+  console.log("running", retries, "times");
+  const userAgent = req && Parser(req.headers["user-agent"]);
+  const isMobile = userAgent && userAgent.device.type === "mobile";
+  const isNsfw = dataHandler("nsfw").includes(params);
+  const fetchedData = await fetch(
+    `https://www.reddit.com/r/${params}.json?limit=100`
+  )
+    .then(response => response.json())
+    .then(async jsonData => {
+      const { data } = jsonData;
+      if (!data && retries < 10) {
+        params = randomSubreddit(isNsfw ? "nsfw" : "sfw");
+        const returnAgain = initialFetchSubreddit(req, params, retries + 1);
+        return returnAgain;
+      }
+      afterData = data.after;
+      const dataWithHtml = dataMapper(data.children, isMobile, isNsfw);
+      if (!dataWithHtml.length && retries < 10) {
+        params = randomSubreddit(isNsfw ? "nsfw" : "sfw");
+        const returnAgain = initialFetchSubreddit(req, params, retries + 1);
+        return returnAgain;
+      }
+      return { preloadedData: dataWithHtml, params, afterThis: data.after };
+    })
+    .catch(error => console.log("ERROR", error));
+  return fetchedData;
+};
+
 class Scroller extends Component {
   static async getInitialProps({ req, query }) {
     const { subreddit } = query;
-    const userAgent = req && Parser(req.headers["user-agent"]);
-    const isMobile = userAgent && userAgent.device.type === "mobile";
-    const preloadedData = await fetch(
-      `https://www.reddit.com/r/${subreddit}.json?limit=100`
-    )
-      .then(response => response.json())
-      .then(async jsonData => {
-        afterData = jsonData.data.after;
-        const isNsfw = dataHandler("nsfw").includes(subreddit);
-        return (
-          jsonData.data && dataMapper(jsonData.data.children, isMobile, isNsfw)
-        );
-      })
-      .catch(error => console.log("ERROR", error));
-
-    return { params: subreddit, preloadedData, afterData };
+    const fetchedData = await initialFetchSubreddit(req, subreddit);
+    return fetchedData;
   }
 
+  state = { nextSubreddit: "" };
+  handleSubredditChange = value => {
+    const href = `/r/${value}`;
+    const as = href;
+    Router.push(href, as, { shallow: true });
+  };
   componentDidMount() {
+    if (this.props.params !== window.location.pathname.split("/r/")[1]) {
+      this.handleSubredditChange(this.props.params);
+    }
+    window.location.pathname !== this.props.params;
     if (window.screen.availWidth < 800)
       this.props.changeContext({ mobile: true });
     this.props.firebase.auth.onAuthStateChanged(user => {
@@ -70,6 +96,13 @@ class Scroller extends Component {
     if (this.props.params === "allsubreddits") {
       return this.changeCat("", "allsubreddits");
     }
+    this.setState({
+      nextSubreddit:
+        this.props.context.category ||
+        dataHandler("nsfw").includes(this.props.params)
+          ? randomSubreddit("nsfw")
+          : randomSubreddit("sfw")
+    });
   }
 
   setSources = value => (sources = value);
@@ -130,7 +163,7 @@ class Scroller extends Component {
     this.toggleIsLoading(true);
     const { category } = this.props.context;
     window.stop();
-    Router.push(`/r/${randomSubreddit(category)}`);
+    Router.push(`/r/${this.state.nextSubreddit}`);
   }, 250);
 
   goBackinHistory =
@@ -301,11 +334,12 @@ class Scroller extends Component {
               showListInput={showListInput}
               isModalVisible={isModalVisible}
               toggleIsLoading={this.toggleIsLoading}
-              nextColl={shuffleArray(dataHandler(this.props.context.category))}
+              nextColl={this.state.nextSubreddit}
             />
             <React.Fragment>
               {sources && sources.length ? (
                 <AddMarkup
+                  nextSubreddit={this.state.nextSubreddit}
                   context={this.props.context}
                   changeContext={this.props.changeContext}
                   activeCollection={this.props.context.activeCollection}
@@ -405,7 +439,9 @@ class Scroller extends Component {
 
   moreSubreddits = async () => {
     this.props.changeContext({ isLoadingMore: true });
-    const apiUrl = `https://www.reddit.com/r/${this.props.params}.json?after=${afterData}&limit=100`;
+    const apiUrl = `https://www.reddit.com/r/${
+      this.props.params
+    }.json?after=${afterData || this.props.afterThis}&limit=100`;
     console.log(`Fetching: ${apiUrl}`);
     const isNsfw = dataHandler("nsfw").includes(this.props.params);
     await fetch(apiUrl)

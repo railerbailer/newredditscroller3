@@ -17,10 +17,7 @@ const SwitchCategoryButtons = props => {
   };
   return (
     <Link
-      href={
-        nextColl &&
-        `/${collectionsMode ? "collections" : "subreddits"}/${nextColl}`
-      }
+      href={nextColl && `/${collectionsMode ? "collections" : "r"}/${nextColl}`}
     >
       <button
         ref={button => button && noInputsActivated && button.focus()}
