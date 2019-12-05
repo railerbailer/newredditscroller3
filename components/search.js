@@ -29,7 +29,7 @@ const SearchComponent = props => {
     setAutoCompleteDataSource(result.slice(0, 7));
   };
   const onSelect = async value => {
-    pushToHistory(`/${collectionMode ? "collections" : "subreddits"}/${value}`);
+    pushToHistory(`/${collectionMode ? "collections" : "r"}/${value}`);
     toggleSearchButton(false);
   };
   return (

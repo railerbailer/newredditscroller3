@@ -26,7 +26,6 @@ let afterData;
 const randomSubreddit = c => shuffleArray(dataHandler(c));
 
 const initialFetchSubreddit = async (req, params, retries = 0) => {
-  console.log("running", retries, "times");
   const userAgent = req && Parser(req.headers["user-agent"]);
   const isMobile = userAgent && userAgent.device.type === "mobile";
   const isNsfw = dataHandler("nsfw").includes(params);

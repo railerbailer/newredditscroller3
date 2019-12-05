@@ -42,7 +42,7 @@ class UserCollectionCards extends Component {
           })
         );
         this.setState({
-          publicCollections: collectionsArray
+          publicCollections: _.shuffle(collectionsArray)
         });
       });
       if (user) {
