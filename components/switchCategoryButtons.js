@@ -27,9 +27,9 @@ const SwitchCategoryButtons = props => {
         <>
           <i className="material-icons">shuffle</i>
           <a>
-            Shuffle
+            Explore
             <br />
-            {collectionsMode ? "collections" : "subreddits"}
+            {collectionsMode ? "Collection" : "Subreddit"}
           </a>
         </>
       </button>
