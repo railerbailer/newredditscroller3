@@ -250,9 +250,12 @@ input {
   .veryWide {
     grid-row: span 6 !important;
   }
-  .superTall,
+
   .veryTall {
     grid-row: span 8 !important;
+  }
+  .superTall {
+    grid-row: span 10 !important;
   }
   .grid-container button {
     width: 280px !important;

@@ -166,13 +166,13 @@ export const dataMapper = (fetchedData, mobile, isNsfw = true) => {
       (mediaData.image || mediaData.video || mediaData.gif)
     ) {
       convertedSources.push(mediaData);
-      // if (
-      //   isNsfw &&
-      //   (convertedSources.length % 10 === 0 || convertedSources.length === 4)
-      // ) {
-      //   const affiliatedAd = createBannerImage();
-      //   convertedSources.push(affiliatedAd);
-      // }
+      if (
+        //convertedSources.length % 10 === 0 ||
+        convertedSources.length === 8
+      ) {
+        const affiliatedAd = createBannerImage();
+        convertedSources.push(affiliatedAd);
+      }
     }
     return null;
   });
@@ -185,17 +185,36 @@ export const dataMapper = (fetchedData, mobile, isNsfw = true) => {
 
 const createBannerImage = () => {
   const affilliates = [
-    // {
-    //   title: "Survey for free stuff",
-    //   image: {
-    //     source: "https://www.imglnkd.com/2680/008231B_PSRV_18_ALL_EN_71_L.jpg",
-    //     affiliateLink:
-    //       "https://t.grtyo.com/3ty8c5z01s?url_id=0&aff_id=112473&offer_id=2680&bo=2786,2787,2788,2789,2790&file_id=366160",
-    //     low: "https://www.imglnkd.com/2680/008231B_PSRV_18_ALL_EN_71_L.jpg",
-    //     high: "https://www.imglnkd.com/2680/008231B_PSRV_18_ALL_EN_71_L.jpg",
-    //     className: imageRatioCalculator(250, 400)
-    //   }
-    // },
+    {
+      title: "CLICK TO GO TO WEBSITE",
+      image: {
+        source: "https://i.imgur.com/ciitCTV.png",
+        affiliateLink: "https://www.theblueboomers.com",
+        low: "https://i.imgur.com/ciitCTV.png",
+        high: "https://i.imgur.com/ciitCTV.png",
+        className: imageRatioCalculator(400, 200)
+      }
+    },
+    {
+      title: "CLICK TO GO TO WEBSITE",
+      image: {
+        source: "https://i.imgur.com/ycq9D2Q.png",
+        affiliateLink: "https://www.theblueboomers.com",
+        low: "https://i.imgur.com/ycq9D2Q.png",
+        high: "https://i.imgur.com/ycq9D2Q.png",
+        className: imageRatioCalculator(400, 200)
+      }
+    },
+    {
+      title: "BUY HERE!",
+      image: {
+        source: "https://i.imgur.com/ycq9D2Q.png",
+        affiliateLink: "https://www.theblueboomers.com",
+        low: "https://i.imgur.com/ycq9D2Q.png",
+        high: "https://i.imgur.com/ycq9D2Q.png",
+        className: imageRatioCalculator(400, 200)
+      }
+    }
     // {
     //   title: "Click for more info",
     //   gif: {
@@ -208,41 +227,41 @@ const createBannerImage = () => {
     //     className: imageRatioCalculator(250, 400)
     //   }
     // },
-    {
-      title: "Click for more info",
-      gif: {
-        source: "https://www.imglnkd.com/3785/005831A_GDAT_18_ALL_EN_71_L.gif",
-        url: "https://www.imglnkd.com/3785/005831A_GDAT_18_ALL_EN_71_L.gif",
-        affiliateLink:
-          "https://t.mobtyb.com/1pvn8k2n5s?url_id=0&aff_id=112473&offer_id=3785&bo=2753,2754,2755,2756",
-        low: "https://www.imglnkd.com/3785/005831A_GDAT_18_ALL_EN_71_L.gif",
-        high: "https://www.imglnkd.com/3785/005831A_GDAT_18_ALL_EN_71_L.gif",
-        className: imageRatioCalculator(250, 400)
-      }
-    },
-    {
-      title: "Click for more info",
-      gif: {
-        source: "https://www.imglnkd.com/3785/006699A_GDAT_18_ALL_EN_71_L.gif",
-        url: "https://www.imglnkd.com/3785/006699A_GDAT_18_ALL_EN_71_L.gif",
-        affiliateLink:
-          "https://t.mobtyb.com/1pvn8k2n5s?url_id=0&aff_id=112473&offer_id=3785&bo=2753,2754,2755,2756",
-        low: "https://www.imglnkd.com/3785/006699A_GDAT_18_ALL_EN_71_L.gif",
-        high: "https://www.imglnkd.com/3785/006699A_GDAT_18_ALL_EN_71_L.gif",
-        className: imageRatioCalculator(250, 400)
-      }
-      // {
-      //   title: "Click for more info",
-      //   gif: {
-      //     source: "https://www.imglnkd.com/3785/006699A_GDAT_18_ALL_EN_71_L.gif",
-      //     url: "https://www.imglnkd.com/3785/006699A_GDAT_18_ALL_EN_71_L.gif",
-      //     affiliateLink:
-      //       "https://t.mobtyb.com/431u2zk5fk?url_id=0&aff_id=112473&offer_id=3785&bo=2753,2754,2755,2756&file_id=334490&po=6456",
-      //     low: "https://www.imglnkd.com/3785/006699A_GDAT_18_ALL_EN_71_L.gif",
-      //     high: "https://www.imglnkd.com/3785/006699A_GDAT_18_ALL_EN_71_L.gif",
-      //     className: imageRatioCalculator(250, 400)
-      //   }
-    }
+    // {
+    //   title: "Click for more info",
+    //   gif: {
+    //     source: "https://www.imglnkd.com/3785/005831A_GDAT_18_ALL_EN_71_L.gif",
+    //     url: "https://www.imglnkd.com/3785/005831A_GDAT_18_ALL_EN_71_L.gif",
+    //     affiliateLink:
+    //       "https://t.mobtyb.com/1pvn8k2n5s?url_id=0&aff_id=112473&offer_id=3785&bo=2753,2754,2755,2756",
+    //     low: "https://www.imglnkd.com/3785/005831A_GDAT_18_ALL_EN_71_L.gif",
+    //     high: "https://www.imglnkd.com/3785/005831A_GDAT_18_ALL_EN_71_L.gif",
+    //     className: imageRatioCalculator(250, 400)
+    //   }
+    // },
+    // {
+    //   title: "Click for more info",
+    //   gif: {
+    //     source: "https://www.imglnkd.com/3785/006699A_GDAT_18_ALL_EN_71_L.gif",
+    //     url: "https://www.imglnkd.com/3785/006699A_GDAT_18_ALL_EN_71_L.gif",
+    //     affiliateLink:
+    //       "https://t.mobtyb.com/1pvn8k2n5s?url_id=0&aff_id=112473&offer_id=3785&bo=2753,2754,2755,2756",
+    //     low: "https://www.imglnkd.com/3785/006699A_GDAT_18_ALL_EN_71_L.gif",
+    //     high: "https://www.imglnkd.com/3785/006699A_GDAT_18_ALL_EN_71_L.gif",
+    //     className: imageRatioCalculator(250, 400)
+    //   }
+    // {
+    //   title: "Click for more info",
+    //   gif: {
+    //     source: "https://www.imglnkd.com/3785/006699A_GDAT_18_ALL_EN_71_L.gif",
+    //     url: "https://www.imglnkd.com/3785/006699A_GDAT_18_ALL_EN_71_L.gif",
+    //     affiliateLink:
+    //       "https://t.mobtyb.com/431u2zk5fk?url_id=0&aff_id=112473&offer_id=3785&bo=2753,2754,2755,2756&file_id=334490&po=6456",
+    //     low: "https://www.imglnkd.com/3785/006699A_GDAT_18_ALL_EN_71_L.gif",
+    //     high: "https://www.imglnkd.com/3785/006699A_GDAT_18_ALL_EN_71_L.gif",
+    //     className: imageRatioCalculator(250, 400)
+    //   }
+    // }
     // {
     //   title: "Click for more info",
     //   image: {
