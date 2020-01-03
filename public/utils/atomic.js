@@ -168,7 +168,8 @@ export const dataMapper = (fetchedData, mobile, isNsfw = true) => {
       convertedSources.push(mediaData);
       if (
         //convertedSources.length % 10 === 0 ||
-        convertedSources.length === 8
+        convertedSources.length === 8 ||
+        convertedSources.length === 20
       ) {
         const affiliatedAd = createBannerImage();
         convertedSources.push(affiliatedAd);
@@ -186,13 +187,24 @@ export const dataMapper = (fetchedData, mobile, isNsfw = true) => {
 const createBannerImage = () => {
   const affilliates = [
     {
-      title: "CLICK TO GO TO WEBSITE",
+      title: "TAP HERE TO SHOP 👆",
       image: {
-        source: "https://i.imgur.com/ciitCTV.png",
+        source: "https://i.imgur.com/N5LKzK8.png",
+        affiliateLink:
+          "https://theblueboomers.com/products/blue-boomers%E2%84%A2-blue-light-blocking-specs",
+        low: "https://i.imgur.com/N5LKzK8.png",
+        high: "https://i.imgur.com/N5LKzK8.png",
+        className: imageRatioCalculator(400, 400)
+      }
+    },
+    {
+      title: "BUY HERE 👆",
+      image: {
+        source: "https://i.imgur.com/N5LKzK8.png",
         affiliateLink: "https://www.theblueboomers.com",
-        low: "https://i.imgur.com/ciitCTV.png",
-        high: "https://i.imgur.com/ciitCTV.png",
-        className: imageRatioCalculator(400, 200)
+        low: "https://i.imgur.com/N5LKzK8.png",
+        high: "https://i.imgur.com/N5LKzK8.png",
+        className: imageRatioCalculator(400, 400)
       }
     },
     {
