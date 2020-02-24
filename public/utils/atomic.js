@@ -166,14 +166,14 @@ export const dataMapper = (fetchedData, mobile, isNsfw = true) => {
       (mediaData.image || mediaData.video || mediaData.gif)
     ) {
       convertedSources.push(mediaData);
-      if (
-        //convertedSources.length % 10 === 0 ||
-        convertedSources.length === 8 ||
-        convertedSources.length === 20
-      ) {
-        const affiliatedAd = createBannerImage();
-        if (affiliatedAd.length) convertedSources.push(affiliatedAd);
-      }
+      // if (
+      //   //convertedSources.length % 10 === 0 ||
+      //   convertedSources.length === 8 ||
+      //   convertedSources.length === 20
+      // ) {
+      //   const affiliatedAd = createBannerImage();
+      //   if (affiliatedAd.length) convertedSources.push(affiliatedAd);
+      // }
     }
     return null;
   });
