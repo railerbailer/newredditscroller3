@@ -172,7 +172,7 @@ export const dataMapper = (fetchedData, mobile, isNsfw = true) => {
         convertedSources.length === 20
       ) {
         const affiliatedAd = createBannerImage();
-        convertedSources.push(affiliatedAd);
+        if (affiliatedAd.length) convertedSources.push(affiliatedAd);
       }
     }
     return null;
@@ -186,47 +186,47 @@ export const dataMapper = (fetchedData, mobile, isNsfw = true) => {
 
 const createBannerImage = () => {
   const affilliates = [
-    {
-      title: "TAP HERE TO SHOP 👆",
-      image: {
-        source: "https://i.imgur.com/N5LKzK8.png",
-        affiliateLink:
-          "https://theblueboomers.com/products/blue-boomers%E2%84%A2-blue-light-blocking-specs",
-        low: "https://i.imgur.com/N5LKzK8.png",
-        high: "https://i.imgur.com/N5LKzK8.png",
-        className: imageRatioCalculator(400, 400)
-      }
-    },
-    {
-      title: "BUY HERE 👆",
-      image: {
-        source: "https://i.imgur.com/N5LKzK8.png",
-        affiliateLink: "https://www.theblueboomers.com",
-        low: "https://i.imgur.com/N5LKzK8.png",
-        high: "https://i.imgur.com/N5LKzK8.png",
-        className: imageRatioCalculator(400, 400)
-      }
-    },
-    {
-      title: "CLICK TO GO TO WEBSITE",
-      image: {
-        source: "https://i.imgur.com/ycq9D2Q.png",
-        affiliateLink: "https://www.theblueboomers.com",
-        low: "https://i.imgur.com/ycq9D2Q.png",
-        high: "https://i.imgur.com/ycq9D2Q.png",
-        className: imageRatioCalculator(400, 200)
-      }
-    },
-    {
-      title: "BUY HERE!",
-      image: {
-        source: "https://i.imgur.com/ycq9D2Q.png",
-        affiliateLink: "https://www.theblueboomers.com",
-        low: "https://i.imgur.com/ycq9D2Q.png",
-        high: "https://i.imgur.com/ycq9D2Q.png",
-        className: imageRatioCalculator(400, 200)
-      }
-    }
+    // {
+    //   title: "TAP HERE TO SHOP 👆",
+    //   image: {
+    //     source: "https://i.imgur.com/N5LKzK8.png",
+    //     affiliateLink:
+    //       "https://theblueboomers.com/products/blue-boomers%E2%84%A2-blue-light-blocking-specs",
+    //     low: "https://i.imgur.com/N5LKzK8.png",
+    //     high: "https://i.imgur.com/N5LKzK8.png",
+    //     className: imageRatioCalculator(400, 400)
+    //   }
+    // },
+    // {
+    //   title: "BUY HERE 👆",
+    //   image: {
+    //     source: "https://i.imgur.com/N5LKzK8.png",
+    //     affiliateLink: "https://www.theblueboomers.com",
+    //     low: "https://i.imgur.com/N5LKzK8.png",
+    //     high: "https://i.imgur.com/N5LKzK8.png",
+    //     className: imageRatioCalculator(400, 400)
+    //   }
+    // },
+    // {
+    //   title: "CLICK TO GO TO WEBSITE",
+    //   image: {
+    //     source: "https://i.imgur.com/ycq9D2Q.png",
+    //     affiliateLink: "https://www.theblueboomers.com",
+    //     low: "https://i.imgur.com/ycq9D2Q.png",
+    //     high: "https://i.imgur.com/ycq9D2Q.png",
+    //     className: imageRatioCalculator(400, 200)
+    //   }
+    // },
+    // {
+    //   title: "BUY HERE!",
+    //   image: {
+    //     source: "https://i.imgur.com/ycq9D2Q.png",
+    //     affiliateLink: "https://www.theblueboomers.com",
+    //     low: "https://i.imgur.com/ycq9D2Q.png",
+    //     high: "https://i.imgur.com/ycq9D2Q.png",
+    //     className: imageRatioCalculator(400, 200)
+    //   }
+    // }
     // {
     //   title: "Click for more info",
     //   gif: {
