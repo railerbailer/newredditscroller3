@@ -35,14 +35,14 @@ const initialFetchSubreddit = async (req, params, retries = 0) => {
     .then(response => response.json())
     .then(async jsonData => {
       const { data } = jsonData;
-      if (!data && retries < 10) {
+      if (!data && retries < 3) {
         params = randomSubreddit(isNsfw ? "nsfw" : "sfw");
         const returnAgain = initialFetchSubreddit(req, params, retries + 1);
         return returnAgain;
       }
       afterData = data.after;
       const dataWithHtml = dataMapper(data.children, isMobile, isNsfw);
-      if (!dataWithHtml.length && retries < 10) {
+      if (!dataWithHtml.length && retries < 3) {
         params = randomSubreddit(isNsfw ? "nsfw" : "sfw");
         const returnAgain = initialFetchSubreddit(req, params, retries + 1);
         return returnAgain;
