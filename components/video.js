@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Icon, Dropdown, Menu, message } from "antd";
 import LazyLoad from "react-lazyload";
+import { FirebaseContext } from "./firebase";
 class Video extends Component {
   constructor() {
     super();
@@ -125,59 +126,67 @@ class Video extends Component {
       <LazyLoad
         unmountIfInvisible={true}
         height={height}
-        offset={1400}
+        offset={100}
         key={index}
         debounce={0}
         throttle={0}
       >
-        <video
-          muted
-          onLoadedMetadata={() => setLoadedData(loadedData + 2)}
-          ref={el => (this.videoPlayer = el)}
-          onClick={() => {
-            toggleFullscreen(index);
-            if (fullscreen) {
-              this.setState({ isPlaying: false }, () =>
-                this.videoPlayer.pause()
-              );
-            } else if (!fullscreen) {
-              this.setState({ isPlaying: true }, () => this.videoPlayer.play());
-            }
-            // (this.state.isPlaying && fullscreen) ||
-            //   (!this.state.isPlaying && !fullscreen && this.togglePlaying());
-            // this.toggleIsDropDownShowing(false);
-          }}
-          poster={poster || undefined}
-          allowFullScreen={true}
-          onCanPlay={() => this.setState({ videoLoaded: true })}
-          className={className}
-          playsInline={true}
-          onPlay={() =>
-            this.setState(
-              { isPlaying: true, fadeOut: !this.state.fadeOut },
-              () =>
-                !fullscreen &&
-                (this.timer = setTimeout(
-                  () => this.videoPlayer && this.videoPlayer.pause(),
-                  25000
-                ))
-            )
-          }
-          onPause={() =>
-            this.setState({ isPlaying: false }, clearTimeout(this.timer))
-          }
-          loop={true}
-          preload={"metadata"}
-        >
-          {!mobile && (
-            <source src={`${srcWithoutDash}DASH_720`} type="video/mp4" />
+        <FirebaseContext.Consumer>
+          {ctx => (
+            <video
+              muted
+              autoPlay={ctx.context.autoPlayVideo}
+              onLoadedMetadata={() => setLoadedData(loadedData + 2)}
+              ref={el => (this.videoPlayer = el)}
+              onClick={() => {
+                toggleFullscreen(index);
+                if (fullscreen) {
+                  this.setState({ isPlaying: false }, () =>
+                    this.videoPlayer.pause()
+                  );
+                } else if (!fullscreen) {
+                  this.setState({ isPlaying: true }, () =>
+                    this.videoPlayer.play()
+                  );
+                }
+                // (this.state.isPlaying && fullscreen) ||
+                //   (!this.state.isPlaying && !fullscreen && this.togglePlaying());
+                // this.toggleIsDropDownShowing(false);
+              }}
+              poster={poster || undefined}
+              allowFullScreen={true}
+              onCanPlay={() => this.setState({ videoLoaded: true })}
+              className={className}
+              playsInline={true}
+              onLoadedData={e => console.log({ e })}
+              onPlay={() =>
+                this.setState(
+                  { isPlaying: true, fadeOut: !this.state.fadeOut },
+                  () =>
+                    !fullscreen &&
+                    (this.timer = setTimeout(
+                      () => this.videoPlayer && this.videoPlayer.pause(),
+                      25000
+                    ))
+                )
+              }
+              onPause={() =>
+                this.setState({ isPlaying: false }, clearTimeout(this.timer))
+              }
+              loop={true}
+              preload={"metadata"}
+            >
+              {!mobile && (
+                <source src={`${srcWithoutDash}DASH_720`} type="video/mp4" />
+              )}
+              {<source src={`${srcWithoutDash}DASH_600_K`} type="video/mp4" />}
+              {<source src={`${srcWithoutDash}DASH_480`} type="video/mp4" />}
+              {<source src={`${srcWithoutDash}DASH_360`} type="video/mp4" />}
+              <source src={src} type="video/mp4" />
+              Sorry, your browser doesn't support embedded videos.
+            </video>
           )}
-          {<source src={`${srcWithoutDash}DASH_600_K`} type="video/mp4" />}
-          {<source src={`${srcWithoutDash}DASH_480`} type="video/mp4" />}
-          {<source src={`${srcWithoutDash}DASH_360`} type="video/mp4" />}
-          <source src={src} type="video/mp4" />
-          Sorry, your browser doesn't support embedded videos.
-        </video>
+        </FirebaseContext.Consumer>
         {permalink && (
           <a
             target="_blank"

@@ -60,7 +60,6 @@ class Scroller extends Component {
     return fetchedData;
   }
 
-  state = { nextSubreddit: "" };
   handleSubredditChange = value => {
     const href = `/r/${value}`;
     const as = href;
@@ -68,6 +67,9 @@ class Scroller extends Component {
   };
   componentDidMount() {
     if (this.props.params !== window.location.pathname.split("/r/")[1]) {
+      message.error(
+        `Could not find subreddit ${window.location.pathname.split("/r/")[1]}`
+      );
       this.handleSubredditChange(this.props.params);
     }
     window.location.pathname !== this.props.params;
@@ -95,7 +97,7 @@ class Scroller extends Component {
     if (this.props.params === "allsubreddits") {
       return this.changeCat("", "allsubreddits");
     }
-    this.setState({
+    this.props.changeContext({
       nextSubreddit:
         this.props.context.category ||
         dataHandler("nsfw").includes(this.props.params)
@@ -109,8 +111,10 @@ class Scroller extends Component {
     this.props.changeContext({ newListName: listName });
   toggleShowListInput = bool =>
     this.props.changeContext({ showListInput: bool });
-  toggleAutoPlayVideo = bool =>
+  toggleAutoPlayVideo = bool => {
     this.props.changeContext({ autoPlayVideo: bool });
+    this.closeDropDownAfterAWhile();
+  };
   setActiveCollection = collection =>
     this.props.changeContext({ activeCollection: collection });
   toggleIsLoading = state => {
@@ -138,31 +142,41 @@ class Scroller extends Component {
         this.props.changeContext({
           isDropDownShowing: false
         }),
-      1500
+      1000
     );
   toggleGifsOnly = async () => {
     this.props.changeContext({
       isOnlyGifsShowing: !this.props.context.isOnlyGifsShowing
     });
+    this.props.changeContext({ nextSubreddit: "" });
     this.closeDropDownAfterAWhile();
-    await this.getSubreddit(this.props.context.subreddit);
+    await this.getSubreddit(this.props.params);
   };
   togglePicsOnly = () => {
+    this.props.changeContext({ nextSubreddit: "" });
     this.props.changeContext({
       isOnlyPicsShowing: !this.props.context.isOnlyPicsShowing
     });
     this.closeDropDownAfterAWhile();
-    this.getSubreddit(this.props.context.subreddit);
+    this.getSubreddit(this.props.params);
   };
   pushToHistory = route => {
     Router.push(route);
   };
 
-  switchCat = _.throttle(() => {
+  switchCat = _.throttle(async () => {
     this.toggleIsLoading(true);
-    const { category } = this.props.context;
+    if (!this.props.context.nextSubreddit) {
+      await this.props.changeContext({
+        nextSubreddit:
+          this.props.context.category ||
+          dataHandler("nsfw").includes(this.props.params)
+            ? randomSubreddit("nsfw")
+            : randomSubreddit("sfw")
+      });
+    }
     window.stop();
-    Router.push(`/r/${this.state.nextSubreddit}`);
+    Router.push(`/r/${this.props.context.nextSubreddit}`);
   }, 250);
 
   goBackinHistory =
@@ -183,7 +197,6 @@ class Scroller extends Component {
       this.switchCat();
     }
     if (e.key === "d") {
-      console.log("D");
       this.switchCat();
     }
   };
@@ -333,12 +346,15 @@ class Scroller extends Component {
               showListInput={showListInput}
               isModalVisible={isModalVisible}
               toggleIsLoading={this.toggleIsLoading}
-              nextColl={this.state.nextSubreddit}
+              nextColl={this.props.context.nextSubreddit}
             />
             <React.Fragment>
               {sources && sources.length ? (
                 <AddMarkup
-                  nextSubreddit={this.state.nextSubreddit}
+                  nextSubreddit={
+                    this.props.context.nextSubreddit ||
+                    this.props.context.subreddit
+                  }
                   context={this.props.context}
                   changeContext={this.props.changeContext}
                   activeCollection={this.props.context.activeCollection}
@@ -400,9 +416,7 @@ class Scroller extends Component {
       isLoading: !notShowLoad
     });
     sources = [];
-    await fetch(
-      `https://www.reddit.com/r/${this.props.context.subreddit}.json?limit=100`
-    )
+    await fetch(`https://www.reddit.com/r/${subreddit}.json?limit=100`)
       .then(response => response.json())
       .then(async jsonData => {
         reload = 0;
@@ -411,16 +425,20 @@ class Scroller extends Component {
         // if (sources.length) {
         //   this.pushToHistory(`/r/${this.props.context.subreddit}`);
         // }
-        // const haveVideoOrGif = sources.length && sources.some(media => media.gif || media.video);
+        this.props.changeContext({ isLoading: false });
       })
 
-      .catch(async () => {
+      .catch(async error => {
+        console.log({ error });
         reload = reload + 1;
-        if (reload < 10 && !sources.length)
-          await this.getSubreddit(
-            shuffleArray(dataHandler(this.props.context.category))
+        if (reload < 10 && !sources.length) {
+          const newSubreddit = shuffleArray(
+            dataHandler(this.props.context.category)
           );
-        else {
+          this.props.changeContext({ nextSubreddit: newSubreddit });
+          await this.getSubreddit(newSubreddit);
+          this.props.changeContext({ isLoading: false });
+        } else {
           alert(
             "Could not load data, check your internet connection. Firefox incognito mode may be causing this issue."
           );
@@ -438,9 +456,9 @@ class Scroller extends Component {
 
   moreSubreddits = async () => {
     this.props.changeContext({ isLoadingMore: true });
-    const apiUrl = `https://www.reddit.com/r/${
-      this.props.params
-    }.json?after=${afterData || this.props.afterThis}&limit=100`;
+    const apiUrl = `https://www.reddit.com/r/${this.props.params}.json?after=${
+      afterData || this.props.afterThis
+    }&limit=100`;
     console.log(`Fetching: ${apiUrl}`);
     const isNsfw = dataHandler("nsfw").includes(this.props.params);
     await fetch(apiUrl)

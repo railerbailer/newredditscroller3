@@ -262,10 +262,7 @@ const MainDropDownMenu = ({
                 Pics
               </Button>
               <Button
-                onClick={() => {
-                  toggleAutoPlayVideo(!autoPlayVideo);
-                  toggleDropDown(false);
-                }}
+                onClick={() => toggleAutoPlayVideo(!autoPlayVideo)}
                 style={{
                   color: "lightgrey",
                   borderRadius: 0,

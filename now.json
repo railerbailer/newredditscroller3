@@ -1,5 +1,4 @@
 {
-  "name": "newredditscroller3",
   "builds": [{ "src": "package.json", "use": "@now/next" }],
   "github": {
     "enabled": false

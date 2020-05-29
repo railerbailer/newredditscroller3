@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Transition } from "react-transition-group";
+import { FirebaseContext } from "../components/firebase";
 import { Icon, AutoComplete, Button } from "antd";
 import { Router } from "next/router";
 const SearchComponent = props => {
@@ -13,6 +14,9 @@ const SearchComponent = props => {
     publicCollections,
     pushToHistory
   } = props;
+  const { context = {}, changeContext = () => {} } = useContext(
+    FirebaseContext
+  );
   const handleSearch = value => {
     if (!value) {
       value = "Type your search";
@@ -29,6 +33,7 @@ const SearchComponent = props => {
     setAutoCompleteDataSource(result.slice(0, 7));
   };
   const onSelect = async value => {
+    changeContext({ isLoading: true, nextSubreddit: value });
     pushToHistory(`/${collectionMode ? "collections" : "r"}/${value}`);
     toggleSearchButton(false);
   };

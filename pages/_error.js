@@ -1,9 +1,10 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Router from "next/router";
-import { Empty } from "antd";
+import { Empty, Button } from "antd";
 import ReactGA from "react-ga";
 
 const MyError = ({ url }) => {
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
     const lastSubString = url[url.length - 1];
     if (lastSubString === "/") {
@@ -35,7 +36,18 @@ const MyError = ({ url }) => {
         style={{ margin: "auto" }}
         description="Sorry! This page doesn't exist!"
         onClick={() => Router.push("/")}
-      />
+      >
+        <Button
+          loading={loading}
+          type="primary"
+          onClick={() => {
+            setLoading(true);
+            Router.push("/");
+          }}
+        >
+          Go back
+        </Button>
+      </Empty>
     </div>
   );
 };
