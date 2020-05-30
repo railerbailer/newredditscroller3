@@ -166,28 +166,92 @@ export const dataMapper = (fetchedData, mobile, isNsfw = true) => {
       (mediaData.image || mediaData.video || mediaData.gif)
     ) {
       convertedSources.push(mediaData);
-      // if (
-      //   //convertedSources.length % 10 === 0 ||
-      //   convertedSources.length === 8 ||
-      //   convertedSources.length === 20
-      // ) {
-      //   const affiliatedAd = createBannerImage();
-      //   if (affiliatedAd.length) convertedSources.push(affiliatedAd);
-      // }
+      if (convertedSources.length % 10 === 0) {
+        const affiliatedAd = createBannerImage();
+
+        convertedSources.push(affiliatedAd);
+      }
     }
     return null;
   });
-  // if (!sources.length || (this.state.isOnlyGifsShowing && !weGotGifs)) {
-  //   await this.getSubreddit(shuffleArray(dataHandler(this.state.category)));
-  // }
 
   return convertedSources;
 };
 
 const createBannerImage = () => {
   const affilliates = [
+    {
+      title: "",
+      image: {
+        source:
+          "http://localhost:3000/affiliate/images/affiliate-banners-388x388-en-v1.jpg",
+        affiliateLink:
+          "https://go.nordvpn.net/aff_c?offer_id=15&aff_id=41576&url_id=902",
+        low:
+          "http://localhost:3000/affiliate/images/affiliate-banners-388x388-en-v1.jpg",
+        high:
+          "http://localhost:3000/affiliate/images/affiliate-banners-388x388-en-v1.jpg",
+        className: imageRatioCalculator(388, 388)
+      }
+    },
+    {
+      title: "",
+      image: {
+        source:
+          "http://localhost:3000/affiliate/images/affiliate-banners-388x388-en-v2.jpg",
+        affiliateLink:
+          "https://go.nordvpn.net/aff_c?offer_id=15&aff_id=41576&url_id=902",
+        low:
+          "http://localhost:3000/affiliate/images/affiliate-banners-388x388-en-v2.jpg",
+        high:
+          "http://localhost:3000/affiliate/images/affiliate-banners-388x388-en-v2.jpg",
+        className: imageRatioCalculator(388, 388)
+      }
+    },
+    {
+      title: "",
+      image: {
+        source:
+          "http://localhost:3000/affiliate/images/affiliate-banners-388x388-en-v3.jpg",
+        affiliateLink:
+          "https://go.nordvpn.net/aff_c?offer_id=15&aff_id=41576&url_id=902",
+        low:
+          "http://localhost:3000/affiliate/images/affiliate-banners-388x388-en-v3.jpg",
+        high:
+          "http://localhost:3000/affiliate/images/affiliate-banners-388x388-en-v3.jpg",
+        className: imageRatioCalculator(388, 388)
+      }
+    },
+    {
+      title: "",
+      image: {
+        source:
+          "http://localhost:3000/affiliate/images/affiliate-banners-388x388-en-v4.jpg",
+        affiliateLink:
+          "https://go.nordvpn.net/aff_c?offer_id=15&aff_id=41576&url_id=902",
+        low:
+          "http://localhost:3000/affiliate/images/affiliate-banners-388x388-en-v4.jpg",
+        high:
+          "http://localhost:3000/affiliate/images/affiliate-banners-388x388-en-v4.jpg",
+        className: imageRatioCalculator(388, 388)
+      }
+    },
+    {
+      title: "",
+      image: {
+        source:
+          "http://localhost:3000/affiliate/images/affiliate-banners-388x388-en-v5.jpg",
+        affiliateLink:
+          "https://go.nordvpn.net/aff_c?offer_id=15&aff_id=41576&url_id=902",
+        low:
+          "http://localhost:3000/affiliate/images/affiliate-banners-388x388-en-v5.jpg",
+        high:
+          "http://localhost:3000/affiliate/images/affiliate-banners-388x388-en-v5.jpg",
+        className: imageRatioCalculator(388, 388)
+      }
+    }
     // {
-    //   title: "TAP HERE TO SHOP 👆",
+    //   title: "",
     //   image: {
     //     source: "https://i.imgur.com/N5LKzK8.png",
     //     affiliateLink:
@@ -196,7 +260,7 @@ const createBannerImage = () => {
     //     high: "https://i.imgur.com/N5LKzK8.png",
     //     className: imageRatioCalculator(400, 400)
     //   }
-    // },
+    // }
     // {
     //   title: "BUY HERE 👆",
     //   image: {
