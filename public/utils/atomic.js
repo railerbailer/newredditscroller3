@@ -183,70 +183,55 @@ const createBannerImage = () => {
     {
       title: "",
       image: {
-        source:
-          "http://localhost:3000/affiliate/images/affiliate-banners-388x388-en-v1.jpg",
+        source: "/affiliate/images/affiliate-banners-388x388-en-v1.jpg",
         affiliateLink:
           "https://go.nordvpn.net/aff_c?offer_id=15&aff_id=41576&url_id=902",
-        low:
-          "http://localhost:3000/affiliate/images/affiliate-banners-388x388-en-v1.jpg",
-        high:
-          "http://localhost:3000/affiliate/images/affiliate-banners-388x388-en-v1.jpg",
+        low: "/affiliate/images/affiliate-banners-388x388-en-v1.jpg",
+        high: "/affiliate/images/affiliate-banners-388x388-en-v1.jpg",
         className: imageRatioCalculator(388, 388)
       }
     },
     {
       title: "",
       image: {
-        source:
-          "http://localhost:3000/affiliate/images/affiliate-banners-388x388-en-v2.jpg",
+        source: "/affiliate/images/affiliate-banners-388x388-en-v2.jpg",
         affiliateLink:
           "https://go.nordvpn.net/aff_c?offer_id=15&aff_id=41576&url_id=902",
-        low:
-          "http://localhost:3000/affiliate/images/affiliate-banners-388x388-en-v2.jpg",
-        high:
-          "http://localhost:3000/affiliate/images/affiliate-banners-388x388-en-v2.jpg",
+        low: "/affiliate/images/affiliate-banners-388x388-en-v2.jpg",
+        high: "/affiliate/images/affiliate-banners-388x388-en-v2.jpg",
         className: imageRatioCalculator(388, 388)
       }
     },
     {
       title: "",
       image: {
-        source:
-          "http://localhost:3000/affiliate/images/affiliate-banners-388x388-en-v3.jpg",
+        source: "/affiliate/images/affiliate-banners-388x388-en-v3.jpg",
         affiliateLink:
           "https://go.nordvpn.net/aff_c?offer_id=15&aff_id=41576&url_id=902",
-        low:
-          "http://localhost:3000/affiliate/images/affiliate-banners-388x388-en-v3.jpg",
-        high:
-          "http://localhost:3000/affiliate/images/affiliate-banners-388x388-en-v3.jpg",
+        low: "/affiliate/images/affiliate-banners-388x388-en-v3.jpg",
+        high: "/affiliate/images/affiliate-banners-388x388-en-v3.jpg",
         className: imageRatioCalculator(388, 388)
       }
     },
     {
       title: "",
       image: {
-        source:
-          "http://localhost:3000/affiliate/images/affiliate-banners-388x388-en-v4.jpg",
+        source: "/affiliate/images/affiliate-banners-388x388-en-v4.jpg",
         affiliateLink:
           "https://go.nordvpn.net/aff_c?offer_id=15&aff_id=41576&url_id=902",
-        low:
-          "http://localhost:3000/affiliate/images/affiliate-banners-388x388-en-v4.jpg",
-        high:
-          "http://localhost:3000/affiliate/images/affiliate-banners-388x388-en-v4.jpg",
+        low: "/affiliate/images/affiliate-banners-388x388-en-v4.jpg",
+        high: "/affiliate/images/affiliate-banners-388x388-en-v4.jpg",
         className: imageRatioCalculator(388, 388)
       }
     },
     {
       title: "",
       image: {
-        source:
-          "http://localhost:3000/affiliate/images/affiliate-banners-388x388-en-v5.jpg",
+        source: "/affiliate/images/affiliate-banners-388x388-en-v5.jpg",
         affiliateLink:
           "https://go.nordvpn.net/aff_c?offer_id=15&aff_id=41576&url_id=902",
-        low:
-          "http://localhost:3000/affiliate/images/affiliate-banners-388x388-en-v5.jpg",
-        high:
-          "http://localhost:3000/affiliate/images/affiliate-banners-388x388-en-v5.jpg",
+        low: "/affiliate/images/affiliate-banners-388x388-en-v5.jpg",
+        high: "/affiliate/images/affiliate-banners-388x388-en-v5.jpg",
         className: imageRatioCalculator(388, 388)
       }
     }
