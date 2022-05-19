@@ -16,7 +16,7 @@ class MyApp extends App {
   //   // calls page's `getInitialProps` and fills `appProps.pageProps`
   //   const appProps = await App.getInitialProps(appContext);
   //
-  //   return { ...appProps }
+  //   return { ...appProps}
   // }
   state = {
     mobile: false,
